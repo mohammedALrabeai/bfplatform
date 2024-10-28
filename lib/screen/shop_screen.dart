@@ -9,7 +9,6 @@ import 'package:many_vendor_app/provider/shop_provider.dart';
 import 'package:many_vendor_app/screen/drawer_screen.dart';
 import 'package:many_vendor_app/screen/loader_screen.dart';
 import 'package:many_vendor_app/screen/single_shop_screen.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -28,9 +27,9 @@ class _ShopScreenState extends State<ShopScreen> {
 
   fetchShop() async {
     /*set shop data tab shop*/
-    ShopHub shopHub =
+    ShopHub? shopHub =
         await Provider.of<ShopProvider>(context, listen: false).hitApi(context);
-    Provider.of<ShopProvider>(context, listen: false).setData(shopHub);
+    Provider.of<ShopProvider>(context, listen: false).setData(shopHub!);
     setState(() {
       shop = Provider.of<ShopProvider>(context, listen: false).getData();
       isLoading = true;
@@ -55,7 +54,7 @@ class _ShopScreenState extends State<ShopScreen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      appBar: customAppBar(context),
+     // appBar: customAppBar(context),
       drawer: Drawer(
         child: DrawerScreen(),
       ),
@@ -85,14 +84,14 @@ class _ShopScreenState extends State<ShopScreen> {
                           margin: EdgeInsets.all(8),
                           child: GestureDetector(
                             onTap: () {
-                              pushNewScreenWithRouteSettings(
-                                context,
-                                screen: SingleShopScreen(shopData: shop[index]),
-                                withNavBar: true,
-                                pageTransitionAnimation:
-                                    PageTransitionAnimation.cupertino,
-                                settings: null,
-                              );
+                              // pushNewScreenWithRouteSettings(
+                              //   context,
+                              //   screen: SingleShopScreen(shopData: shop[index]),
+                              //   withNavBar: true,
+                              //   pageTransitionAnimation:
+                              //       PageTransitionAnimation.cupertino,
+                              //   settings: null,
+                              // );
                             },
                             child: Card(
                               color: Colors.white,

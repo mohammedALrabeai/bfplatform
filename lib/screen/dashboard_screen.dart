@@ -17,10 +17,10 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   bool isLoading = true;
-  String email;
-  String name;
-  String avatar;
-  String token;
+  String email="";
+  String name="";
+  String avatar="";
+  String token="";
 
   checkAuth() async {
     if (await authCheck() != null) {
@@ -51,7 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      appBar: customSingleAppBar(context, 'لوحة التحكم', textWhiteColor),
+      //appBar: customSingleAppBar(context, 'لوحة التحكم', textWhiteColor),
       body: isLoading
           ? Center(
               child: CircularProgressIndicator(),

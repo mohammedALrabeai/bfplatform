@@ -1,17 +1,17 @@
 
 
 class CampaignClass {
-  List<CampaignData> data;
+  List<CampaignData>? data;
 
-  CampaignClass({List<CampaignData> data}) {
-    data = data;
+  CampaignClass({List<CampaignData>? data}) {
+    data = data!;
   }
 
   CampaignClass.fromJson(dynamic json) {
     if (json["data"] != null) {
       data = [];
       json["data"].forEach((v) {
-        data.add(CampaignData.fromJson(v));
+        data!.add(CampaignData.fromJson(v));
       });
     }
   }
@@ -19,7 +19,7 @@ class CampaignClass {
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     if (data != null) {
-      map["data"] = data.map((v) => v.toJson()).toList();
+      map["data"] = data!.map((v) => v.toJson()).toList();
     }
     return map;
   }
@@ -28,32 +28,32 @@ class CampaignClass {
 
 
 class CampaignData {
-  int _id;
-  String _title;
-  String _banner;
-  int _offer;
-  String _startFrom;
-  String _endAt;
+  int? _id;
+  String? _title;
+  String? _banner;
+  int? _offer;
+  String? _startFrom;
+  String? _endAt;
 
-  int get id => _id;
+  int get id => _id!;
 
-  String get title => _title;
+  String get title => _title!;
 
-  String get banner => _banner;
+  String get banner => _banner!;
 
-  int get offer => _offer;
+  int get offer => _offer!;
 
-  String get startFrom => _startFrom;
+  String get startFrom => _startFrom!;
 
-  String get endAt => _endAt;
+  String get endAt => _endAt!;
 
   CampaignData(
-      {int id,
-      String title,
-      String banner,
-      int offer,
-      String startFrom,
-      String endAt}) {
+      {int? id,
+      String? title,
+      String? banner,
+      int? offer,
+      String? startFrom,
+      String? endAt}) {
     _id = id;
     _title = title;
     _banner = banner;
@@ -72,7 +72,8 @@ class CampaignData {
   }
 
   Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
+    var map =
+    <String, dynamic>{};
     map["id"] = _id;
     map["title"] = _title;
     map["banner"] = _banner;

@@ -1,13 +1,7 @@
-
-
 class ReturnCart {
-  CartData data;
+  CartData? data;
 
-
-  ReturnCart({
-    CartData data}){
-    data = data;
-}
+  ReturnCart({this.data});
 
   ReturnCart.fromJson(dynamic json) {
     data = json["data"] != null ? CartData.fromJson(json["data"]) : null;
@@ -16,42 +10,30 @@ class ReturnCart {
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     if (data != null) {
-      map["data"] = data.toJson();
+      map["data"] = data!.toJson();
     }
     return map;
   }
-
 }
-
-
 
 class CartData {
   dynamic subTotalPrice;
-  String subTotalPriceFormat;
+  String? subTotalPriceFormat;
   dynamic totalTax;
-  String totalTaxFormat;
-  String totalPriceFormat;
+  String? totalTaxFormat;
+  String? totalPriceFormat;
   dynamic totalPrice;
-  List<Products> products;
-
-
+  List<Products>? products;
 
   CartData({
-    dynamic subTotalPrice,
-      String subTotalPriceFormat,
-    dynamic totalTax,
-      String totalTaxFormat, 
-      String totalPriceFormat,
-    dynamic totalPrice,
-      List<Products> products}){
-    subTotalPrice = subTotalPrice;
-    subTotalPriceFormat = subTotalPriceFormat;
-    totalTax = totalTax;
-    totalTaxFormat = totalTaxFormat;
-    totalPriceFormat = totalPriceFormat;
-    totalPrice = totalPrice;
-    products = products;
-}
+    this.subTotalPrice,
+    this.subTotalPriceFormat,
+    this.totalTax,
+    this.totalTaxFormat,
+    this.totalPriceFormat,
+    this.totalPrice,
+    this.products,
+  });
 
   CartData.fromJson(dynamic json) {
     subTotalPrice = json["subTotalPrice"];
@@ -63,11 +45,10 @@ class CartData {
     if (json["products"] != null) {
       products = [];
       json["products"].forEach((v) {
-        products.add(Products.fromJson(v));
+        products!.add(Products.fromJson(v));
       });
     }
   }
-
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
@@ -78,55 +59,40 @@ class CartData {
     map["totalPriceFormat"] = totalPriceFormat;
     map["totalPrice"] = totalPrice;
     if (products != null) {
-      map["products"] = products.map((v) => v.toJson()).toList();
+      map["products"] = products!.map((v) => v.toJson()).toList();
     }
     return map;
   }
-
 }
-
-
 
 class Products {
-  int productId;
-  int vendorStockId;
-  String img;
-  String name;
-  int quantity;
+  int? productId;
+  int? vendorStockId;
+  String? img;
+  String? name;
+  int? quantity;
   dynamic campaign;
   dynamic campaignId;
-  String priceFormat;
+  String? priceFormat;
   dynamic price;
   dynamic subPrice;
-  String subPriceFormat;
-  String shopName;
+  String? subPriceFormat;
+  String? shopName;
 
   Products({
-      int productId, 
-      int vendorStockId,
-      String img,
-      String name, 
-      int quantity,
-      dynamic campaign,
-      dynamic campaignId,
-      String priceFormat,
-    dynamic price,
-    dynamic subPrice,
-      String subPriceFormat, 
-      String shopName}){
-    productId = productId;
-    vendorStockId = vendorStockId;
-    img = img;
-    name = name;
-    quantity = quantity;
-    campaign = campaign;
-    campaignId = campaignId;
-    priceFormat = priceFormat;
-    price = price;
-    subPrice = subPrice;
-    subPriceFormat = subPriceFormat;
-    shopName = shopName;
-}
+    this.productId,
+    this.vendorStockId,
+    this.img,
+    this.name,
+    this.quantity,
+    this.campaign,
+    this.campaignId,
+    this.priceFormat,
+    this.price,
+    this.subPrice,
+    this.subPriceFormat,
+    this.shopName,
+  });
 
   Products.fromJson(dynamic json) {
     productId = json["productId"];
@@ -159,5 +125,4 @@ class Products {
     map["shopName"] = shopName;
     return map;
   }
-
 }

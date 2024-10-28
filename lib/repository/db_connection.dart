@@ -37,9 +37,11 @@ class DatabaseConnection {
     var setting = await db.query('Setting');
     return List.generate(setting.length, (i) {
       return AppSetting(
-          id: setting[i]['id'],
-          type: setting[i]['type'],
-          value: setting[i]['value']);
+          id:
+          int.parse(
+          setting[i]['id'].toString()),
+          type: setting[i]['type'].toString(),
+          value: setting[i]['value'].toString());
     });
   }
 
@@ -63,7 +65,8 @@ class DatabaseConnection {
     final db = await init();
     var wish = await db.query('wishlist');
     return List.generate(wish.length, (i) {
-      return Wishlist(id: wish[i]['id'], productId: wish[i]['productId']);
+      return Wishlist(id: int.parse(wish[i]['id'].toString()),
+      productId: int.parse(wish[i]['productId'].toString()));
     });
   }
 
@@ -88,10 +91,10 @@ class DatabaseConnection {
     var carts = await db.query('cart');
     return List.generate(carts.length, (index) {
       return Cart(
-        id: carts[index]['id'],
-        vendorStockId: carts[index]['vendorStockId'],
-        quantity: carts[index]['quantity'],
-        campaignId: carts[index]['campaignId'],
+        id: int.parse(carts[index]['id'].toString()),
+        vendorStockId: int.parse(carts[index]['vendorStockId'].toString()),
+        quantity:int.parse( carts[index]['quantity'].toString()),
+        campaignId:int.parse( carts[index]['campaignId'].toString()),
       );
     });
   }
@@ -99,7 +102,8 @@ class DatabaseConnection {
   Future<int> quantity() async {
     final db = await init();
     var carts = await db.rawQuery('SELECT SUM(quantity) FROM cart');
-    int value = carts[0]["SUM(quantity)"] == null ? 0 :carts[0]["SUM(quantity)"];
+    int value = carts[0]["SUM(quantity)"] == null ? 0 :
+   int.parse(carts[0]["SUM(quantity)"].toString());
     return value;
   }
 
@@ -127,7 +131,9 @@ class DatabaseConnection {
       if (element.vendorStockId == cart.vendorStockId) {
         cart.quantity = element.quantity + 1;
         status = false;
-        return addToCartUpdate(element.vendorStockId, cart);
+        return
+          int.parse(
+          addToCartUpdate(element.vendorStockId, cart).toString());
       }
     });
     if (status) {

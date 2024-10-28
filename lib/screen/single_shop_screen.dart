@@ -12,23 +12,23 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class SingleShopScreen extends StatefulWidget {
-  ShopData shopData;
-  SingleShopScreen({this.shopData});
+ final ShopData shopData;
+  SingleShopScreen({required this.shopData});
   @override
   _SingleShopScreenState createState() => _SingleShopScreenState();
 }
 
 class _SingleShopScreenState extends State<SingleShopScreen> {
-  List<ShopProductData> shopProductData;
+  List<ShopProductData> shopProductData=[];
   bool isLoading = true;
   getShopProduct() async {
-    ShopProductHub shopProduct =
+    ShopProductHub? shopProduct =
         await Provider.of<ShopProductProvider>(context, listen: false)
             .hitApi(widget.shopData.vendorId);
 
     /*set data*/
     Provider.of<ShopProductProvider>(context, listen: false)
-        .setData(shopProduct);
+        .setData(shopProduct!);
     setState(() {
       shopProductData =
           Provider.of<ShopProductProvider>(context, listen: false).getData();
@@ -49,7 +49,7 @@ class _SingleShopScreenState extends State<SingleShopScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: customAppBar(context),
+        //appBar: customAppBar(context),
         body: Container(
           decoration: BoxDecoration(
               image: DecorationImage(

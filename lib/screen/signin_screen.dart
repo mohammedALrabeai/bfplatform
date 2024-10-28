@@ -9,7 +9,6 @@ import 'package:many_vendor_app/helper/helper.dart';
 import 'package:many_vendor_app/provider/cart_count_provider.dart';
 import 'package:many_vendor_app/screen/reset_screen.dart';
 import 'package:many_vendor_app/screen/signup_screen.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'drawer_screen.dart';
@@ -30,11 +29,11 @@ class _SignInScreenState extends State<SignInScreen> {
   bool _isLoading = false;
 
   void showInSnackBar(String value) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-      padding: EdgeInsets.all(snackBarPadding),
-      content: Text(value),
-      duration: barDuration,
-    ));
+    // _scaffoldKey.currentState.showSnackBar(SnackBar(
+    //   padding: EdgeInsets.all(snackBarPadding),
+    //   content: Text(value),
+    //   duration: barDuration,
+   // ));
   }
 
   _login(String email, String password) async {
@@ -45,7 +44,9 @@ class _SignInScreenState extends State<SignInScreen> {
     try {
       String url = baseUrl + 'login';
       final _result =
-          await http.post(url, body: {'email': email, 'password': password});
+          await http.post(
+              Uri.parse(
+              url), body: {'email': email, 'password': password});
       print('login cred ${_result.body.toString()}');
       if (_result.statusCode == 200 && _result.body != null) {
         final data = json.decode(_result.body);
@@ -58,7 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
             _showSuccessMessage(context, data['errorMessage']);
             Timer(Duration(seconds: 1), () {
               Navigator.pop(context);
-              pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
+             // pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
             });
           }
           _showSuccessMessage(context, data['errorMessage']);
@@ -164,9 +165,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
   bool validateEmail(String value) {
     try {
-      Pattern pattern =
-          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-      RegExp regex = new RegExp(pattern);
+      // Pattern pattern =
+      //     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      RegExp regex = new RegExp( r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
       if (!regex.hasMatch(value))
         return false;
       else
@@ -189,7 +190,7 @@ class _SignInScreenState extends State<SignInScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         key: _scaffoldKey,
-        appBar: customAppBar(context),
+      //  appBar: customAppBar(context),
         drawer: Drawer(
           child: DrawerScreen(),
         ),

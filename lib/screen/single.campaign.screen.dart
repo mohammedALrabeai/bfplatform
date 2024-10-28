@@ -17,7 +17,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 class SingleCampaignScreen extends StatefulWidget {
   CampaignData campaignData;
 
-  SingleCampaignScreen({this.campaignData});
+  SingleCampaignScreen({required this.campaignData});
 
   @override
   _SingleCampaignScreenState createState() => _SingleCampaignScreenState();
@@ -25,15 +25,15 @@ class SingleCampaignScreen extends StatefulWidget {
 
 class _SingleCampaignScreenState extends State<SingleCampaignScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  List<Data> _data;
+  List<Data> _data=[];
   bool isLoading = true;
 
   fetchData() async {
-    CampaignItem campaignItem =
+    CampaignItem? campaignItem =
         await Provider.of<CampaignItemProvider>(context, listen: false)
             .hitApi(widget.campaignData.id, context);
     Provider.of<CampaignItemProvider>(context, listen: false)
-        .setData(campaignItem);
+        .setData(campaignItem!);
     setState(() {
       _data =
           Provider.of<CampaignItemProvider>(context, listen: false).getData();
@@ -79,7 +79,7 @@ class _SingleCampaignScreenState extends State<SingleCampaignScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         key: _scaffoldKey,
-        appBar: customAppBar(context),
+       // appBar: customAppBar(context),
         body: isLoading
             ? LoaderScreen()
             : _data.length == 0

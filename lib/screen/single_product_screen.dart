@@ -26,7 +26,7 @@ import 'package:provider/provider.dart';
 class SingleProductScreen extends StatefulWidget {
   ShopProductData shopProductData;
 
-  SingleProductScreen({@required this.shopProductData});
+  SingleProductScreen({required this.shopProductData});
 
   @override
   _SingleProductScreenState createState() => _SingleProductScreenState();
@@ -35,12 +35,12 @@ class SingleProductScreen extends StatefulWidget {
 class _SingleProductScreenState extends State<SingleProductScreen> {
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool isLoading = true;
-  ProductDetails details;
+  ProductDetails? details;
 
   // final forCart
-  Product _product;
+  Product? _product;
 
-  List<Widget> images = new List();
+  List<Widget> images =[];
 
   List<Variants> apiVariant = [];
 
@@ -50,7 +50,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
     Provider.of<VariantStatus>(context, listen: false).changeStatus(data);
 
     setState(() {
-      _product.forCart.shuffle();
+      _product!.forCart.shuffle();
     });
   }
 
@@ -58,13 +58,13 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
     details = await Provider.of<ProductDetailsProvider>(context, listen: false)
         .hitApi(widget.shopProductData.productId);
     Provider.of<ProductDetailsProvider>(context, listen: false)
-        .setData(details);
+        .setData(details!);
     setState(() {
       apiVariant = Provider.of<ProductDetailsProvider>(context, listen: false)
           .getVariant();
       _product =
           Provider.of<ProductDetailsProvider>(context, listen: false).getData();
-      _product.images.forEach((element) {
+      _product!.images.forEach((element) {
         images.add(CachedNetworkImage(
           imageUrl: element.url,
           fit: BoxFit.cover,
@@ -90,10 +90,10 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
   }
 
   void showInSnackBar(String value) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-        padding: EdgeInsets.all(snackBarPadding),
-        content: Text(value),
-        duration: barDuration));
+    // _scaffoldKey.currentState.showSnackBar(SnackBar(
+    //     padding: EdgeInsets.all(snackBarPadding),
+    //     content: Text(value),
+    //     duration: barDuration));
   }
 
   @override
@@ -199,7 +199,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
         : Scaffold(
             backgroundColor: Colors.white,
             key: _scaffoldKey,
-            appBar: customAppBar(context),
+           // appBar: customAppBar(context),
             body: Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
@@ -209,7 +209,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                 children: <Widget>[
                   ProductSlider(
                     img: images,
-                    discountHave: _product.discountHave,
+                    discountHave: _product!.discountHave,
                     productId: widget.shopProductData.productId,
                   ),
                   //Todo:there are product details
@@ -219,7 +219,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(_product.name,
+                        Text(_product!.name,
                             style: TextStyle(
                                 fontFamily: fontFamily,
                                 fontWeight: FontWeight.bold,
@@ -241,7 +241,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              _product.price,
+                              _product!.price,
                               style: TextStyle(
                                   fontSize: 16,
                                   fontFamily: fontFamily,
@@ -250,7 +250,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                             ),
                           ],
                         ),
-                        _product.bigDesc != null
+                        _product!.bigDesc != null
                             ? Padding(
                                 padding: EdgeInsets.all(8),
                                 child: ExpandablePanel(
@@ -262,13 +262,13 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   collapsed: Text(
-                                    _product.bigDesc,
+                                    _product!.bigDesc,
                                     softWrap: true,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   expanded: Text(
-                                    _product.bigDesc,
+                                    _product!.bigDesc,
                                     softWrap: true,
                                     style: TextStyle(color: textBlackColor),
                                   ),
@@ -288,14 +288,14 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                TrendingCategoryData _re;
+                                TrendingCategoryData? _re;
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             SingleCategoryScreen(
-                                              id: _product.catId,
-                                              trendingCategoryData: _re,
+                                              id: _product!.catId,
+                                              trendingCategoryData: _re!,
                                             )));
                               },
                               child: Row(
@@ -306,7 +306,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                           color: textBlackColor,
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold)),
-                                  Text(_product.catName,
+                                  Text(_product!.catName,
                                       style: TextStyle(
                                           fontFamily: fontFamily,
                                           color: textBlackColor,
@@ -320,14 +320,14 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                             ),
                             GestureDetector(
                                 onTap: () {
-                                  BrandData brandData;
+                                  BrandData? brandData;
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               SingleBrandProductScreen(
-                                                brandData: brandData,
-                                                id: _product.brandId,
+                                                brandData: brandData!,
+                                                id: _product!.brandId,
                                               )));
                                 },
                                 child: Row(
@@ -341,7 +341,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      _product.brand,
+                                      _product!.brand,
                                       style: TextStyle(
                                           fontFamily: fontFamily,
                                           fontSize: 14,
@@ -371,13 +371,13 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                           color: textBlackColor),
                     ),
                   ),
-                  _product.forCart.length > 0
+                  _product!.forCart.length > 0
                       ? Container(
                           padding: EdgeInsets.all(8),
                           child: GridView.builder(
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
-                              itemCount: _product.forCart.length,
+                              itemCount: _product!.forCart.length,
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight(
                                       mainAxisSpacing: 2,
@@ -397,13 +397,12 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                           height: 100,
                                           width: size.width,
                                           margin: EdgeInsets.only(top: 5),
-                                          child: _product.forCart[index]
+                                          child: _product!.forCart[index]
                                                       .shopLogo ==
                                                   null
                                               ? Container()
                                               : CachedNetworkImage(
-                                                  imageUrl: _product
-                                                      .forCart[index].shopLogo,
+                                                  imageUrl: _product!.forCart[index].shopLogo,
                                                   fit: BoxFit.cover,
                                                   progressIndicatorBuilder: (context,
                                                           url,
@@ -417,7 +416,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                                       (context, url, error) =>
                                                           Icon(Icons.error),
                                                 )),
-                                      _product.forCart[index].stockOut
+                                      _product!.forCart[index].stockOut
                                           ? Center(
                                               child: Container(
                                                 child: Text(
@@ -437,7 +436,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                                           .spaceAround,
                                                   children: [
                                                     RatingBar.builder(
-                                                      initialRating: _product
+                                                      initialRating: _product!
                                                           .forCart[index].rating
                                                           .toDouble(),
                                                       minRating: 1,
@@ -458,7 +457,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                                           (rating) {},
                                                     ),
                                                     Text(
-                                                      _product.forCart[index]
+                                                      _product!.forCart[index]
                                                           .priceFormat,
                                                       style: TextStyle(
                                                           fontFamily:
@@ -467,7 +466,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                                               secondaryColor),
                                                     ),
                                                     Text(
-                                                      _product.forCart[index]
+                                                      _product!.forCart[index]
                                                           .discountText,
                                                       style: TextStyle(
                                                           fontFamily:
@@ -476,7 +475,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                                               secondaryColor),
                                                     ),
                                                     Text(
-                                                      _product.forCart[index]
+                                                      _product!.forCart[index]
                                                           .extraPriceFormat,
                                                       style: TextStyle(
                                                           fontFamily:
@@ -485,7 +484,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                                               secondaryColor),
                                                     ),
                                                     Text(
-                                                      _product.forCart[index]
+                                                      _product!.forCart[index]
                                                           .totalPriceFormat,
                                                       style: TextStyle(
                                                           fontFamily:
@@ -494,7 +493,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                                               secondaryColor),
                                                     ),
                                                     Text(
-                                                      _product.forCart[index]
+                                                      _product!.forCart[index]
                                                           .variant,
                                                       style: TextStyle(
                                                           fontFamily:
@@ -525,7 +524,7 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                                                       ),
                                                       onTap: () {
                                                         _addToCart(
-                                                            _product
+                                                            _product!
                                                                 .forCart[index]
                                                                 .vendorStockId,
                                                             context);
@@ -556,7 +555,7 @@ class ProductSlider extends StatefulWidget {
   bool discountHave;
   int productId;
 
-  ProductSlider({this.img, this.discountHave, this.productId});
+  ProductSlider({required this.img,required this.discountHave,required this.productId});
 
   @override
   _ProductSliderState createState() => _ProductSliderState();
@@ -647,7 +646,7 @@ class _ProductSliderState extends State<ProductSlider> {
                   itemBuilder: (context, index) {
                     return Stack(
                       fit: StackFit.expand,
-                      overflow: Overflow.visible,
+                      //overflow: Overflow.visible,
                       children: [
                         Container(width: size.width, child: widget.img[index]),
                         Positioned.fill(

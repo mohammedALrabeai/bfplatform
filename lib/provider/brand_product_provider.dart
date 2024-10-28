@@ -9,7 +9,7 @@ import 'package:many_vendor_app/screen/server_error_screen.dart';
 
 class BrandProductProvider extends ChangeNotifier{
   ShopProductHub _shopProductHub = new ShopProductHub();
-  List<ShopProductData> list = new List();
+  List<ShopProductData> list = [];
 
   BrandProductProvider(){
     _shopProductHub.data = list;
@@ -24,10 +24,10 @@ class BrandProductProvider extends ChangeNotifier{
     return _shopProductHub.data;
   }
 
-  Future<ShopProductHub> hitApi(id,context) async{
-    ShopProductHub shopProductHub;
+  Future<ShopProductHub?> hitApi(id,context) async{
+    ShopProductHub? shopProductHub;
     try{
-      var response = await http.get(baseUrl+'brand/$id');
+      var response = await http.get(Uri.parse(baseUrl+'brand/$id'));
 
       if(response.statusCode ==200){
         final Map parsed = jsonDecode(response.body.toString());

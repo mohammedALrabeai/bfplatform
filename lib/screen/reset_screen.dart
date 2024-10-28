@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:many_vendor_app/helper/appbar.dart';
 import 'package:many_vendor_app/helper/helper.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+//import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'codematch_screen.dart';
@@ -24,11 +24,11 @@ class _ResetScreenState extends State<ResetScreen> {
   bool _isLoading = false;
 
   void showInSnackBar(String value) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-      padding: EdgeInsets.all(snackBarPadding),
-      content: Text(value),
-      duration: barDuration,
-    ));
+    // _scaffoldKey.currentState.showSnackBar(SnackBar(
+    //   padding: EdgeInsets.all(snackBarPadding),
+    //   content: Text(value),
+    //   duration: barDuration,
+    // ));
   }
 
   _sendToken(String email) async {
@@ -39,7 +39,9 @@ class _ResetScreenState extends State<ResetScreen> {
     });
     try {
       String url = baseUrl + '1/forget/password/' + email;
-      final _result = await http.get(url);
+      final _result = await http.get(
+          Uri.parse(
+          url));
       print('lf email natok ${_result.body.toString()}');
       if (_result.statusCode == 200 && _result.body != null) {
         final data = json.decode(_result.body);
@@ -57,8 +59,8 @@ class _ResetScreenState extends State<ResetScreen> {
           _showSuccessMessage(context, data['message']);
           Timer(Duration(seconds: 2), () {
             Navigator.pop(context);
-            pushNewScreen(context,
-                screen: CodeMatchScreen(), withNavBar: false);
+            // pushNewScreen(context,
+            //     screen: CodeMatchScreen(), withNavBar: false);
           });
         }
       }
@@ -159,9 +161,9 @@ class _ResetScreenState extends State<ResetScreen> {
 
   bool validateEmail(String value) {
     try {
-      Pattern pattern =
-          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-      RegExp regex = new RegExp(pattern);
+      // Pattern pattern =
+      //     r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      RegExp regex = new RegExp( r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
       if (!regex.hasMatch(value))
         return false;
       else
@@ -178,7 +180,7 @@ class _ResetScreenState extends State<ResetScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         key: _scaffoldKey,
-        appBar: customSingleAppBar(context, 'Reset Password', Colors.white),
+       // appBar: customSingleAppBar(context, 'Reset Password', Colors.white),
         body: SingleChildScrollView(
           child: Container(
             decoration: BoxDecoration(

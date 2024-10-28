@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 class ThanaProvider extends ChangeNotifier{
   ThanaClass _thanaClass=new ThanaClass();
-  List<ThanaData> list = new List();
+  List<ThanaData> list = [];
 
   ThanaProvider(){
     _thanaClass.data = list;
@@ -24,9 +24,11 @@ class ThanaProvider extends ChangeNotifier{
     return _thanaClass.data;
   }
 
-  Future<ThanaClass> hitApi(id) async{
-    var response = await http.get(baseUrl+'city/'+id.toString());
-    ThanaClass thanaClass;
+  Future<ThanaClass?> hitApi(id) async{
+    var response = await http.get(
+        Uri.parse(
+        baseUrl+'city/'+id.toString()));
+    ThanaClass? thanaClass;
     if(response.statusCode == 200){
       final Map parsed = jsonDecode(response.body.toString());
       thanaClass = ThanaClass.fromJson(parsed);

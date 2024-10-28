@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:data_connection_checker_tv/data_connection_checker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:many_vendor_app/model/slider.dart';
@@ -12,7 +12,6 @@ import 'package:many_vendor_app/provider/slider_provider.dart';
 import 'package:many_vendor_app/screen/exception_screen.dart';
 import 'package:many_vendor_app/screen/home_screen.dart';
 import 'package:many_vendor_app/screen/signin_screen.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +23,7 @@ String two = "ابحث عن ماتحتاج"; //second screen
 String url = 'https://bfplatform.com'; //todo::this is base_url
 
 List<SliderImage> getSlider() {
-  List<SliderImage> sliders = new List<SliderImage>();
+  List<SliderImage> sliders = [];
   var slide1 = new SliderImage(
       logo: 'assets/2.png',
       desc:
@@ -88,36 +87,46 @@ class SliderImage {
   String background;
 
   SliderImage(
-      {this.logo, this.imgPath, this.topTitle, this.desc, this.background});
+      {
+       required this.logo,
+        required this.imgPath,
+        required this.topTitle,required this.desc,
+        required this.background});
 }
 
 logout(token, context) async {
   try {
+    // final String url = 'https://doors-windowsbackend.onrender.com/api/products';
+    // final response = await http.get(
+    //     Uri.parse('${baseUrl}/api/products'),
+    //
+    // '${baseUrl}/api/products'
     final url = baseUrl + 'logout';
-    await http.post(url, headers: {
+    await http.post( Uri.parse("${url}") , headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     });
     removeSharedPreferences();
-    pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
+   // pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
   } catch (e) {
     removeSharedPreferences();
-    pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
+   // pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
   }
 }
 
 void statusCheck(context) async {
   bool result = await DataConnectionChecker().hasConnection;
   if (result == true) {
-    var response = await http.get(baseUrl + 'status');
+    var response = await http.get(
+        Uri.parse(baseUrl + 'status'));
     var value = jsonDecode(response.body.toString());
     print('status ${value['status']}');
     if (value['status'] != 'vendor') {
       /*this is vendor app*/
       if (value['status'] == null) {
       } else {
-        pushNewScreen(context, screen: ExceptionScreen(), withNavBar: false);
+        //pushNewScreen(context, screen: ExceptionScreen(), withNavBar: false);
       }
     }
   } else {
@@ -129,7 +138,7 @@ void statusCheck(context) async {
                 textAlign: TextAlign.center,
               ),
               actions: [
-                FlatButton(
+                MaterialButton(
                     onPressed: () {
                       exit(0);
                     },
@@ -202,10 +211,11 @@ Future<Auth> getAuthUserData(context) async {
       _prefs.containsKey('name') &&
       _prefs.containsKey('avatar') &&
       _prefs.containsKey('email')) {
-    user.email = _prefs.getString('email');
-    user.name = _prefs.getString('name');
-    user.avatar = _prefs.getString('avatar');
-    user.token = _prefs.getString('token');
+    /// need to explain
+    // user.email = _prefs.getString('email');
+    // user.name = _prefs.getString('name');
+    // user.avatar = _prefs.getString('avatar');
+    // user.token = _prefs.getString('token');
   } else {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => SignInScreen()));
@@ -213,13 +223,13 @@ Future<Auth> getAuthUserData(context) async {
   return user;
 }
 
-Future<String> authCheck() async {
-  SharedPreferences _prefs = await SharedPreferences.getInstance();
-  if (_prefs.containsKey('token') &&
-      _prefs.containsKey('name') &&
-      _prefs.containsKey('avatar') &&
-      _prefs.containsKey('email')) {
-    return _prefs.getString('token');
+Future<String?> authCheck() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.containsKey('token') &&
+      prefs.containsKey('name') &&
+      prefs.containsKey('avatar') &&
+      prefs.containsKey('email')) {
+    return prefs.getString('token');
   } else {
     return null;
   }
@@ -227,13 +237,13 @@ Future<String> authCheck() async {
 
 Future<String> getToken() async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
-  return _prefs.getString('token');
+  return _prefs.getString('token').toString();
 }
 
 getStringValuesSF() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   //Return String
-  String stringValue = prefs.getString('stringValue');
+  String? stringValue = prefs.getString('stringValue');
   return stringValue;
 }
 
@@ -242,7 +252,7 @@ class _CustomCarouselState extends State<CustomCarousel>
   List<Widget> img = [];
   int currentIndex = 0;
   PageController pageController = PageController(initialPage: 0);
-  Timer timer;
+  Timer? timer;
 
   @override
   void initState() {
@@ -274,7 +284,7 @@ class _CustomCarouselState extends State<CustomCarousel>
   }
 
   Future<void> getSliderData() async {
-    SliderClass slider =
+    SliderClass? slider =
         await Provider.of<SliderProvider>(context, listen: false).hitApi();
     //set data
     Provider.of<SliderProvider>(context, listen: false).setData(slider);

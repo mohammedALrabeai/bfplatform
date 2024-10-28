@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class LogisticProvider extends ChangeNotifier{
   LogisticClass _logisticClass =  LogisticClass();
-  List<LogisticData> list = new List();
+  List<LogisticData> list =[];
 
   LogisticProvider(){
     _logisticClass.data =list;
@@ -24,9 +24,11 @@ class LogisticProvider extends ChangeNotifier{
   }
 
 
-  Future<LogisticClass> hitApi(d,a) async{
-    var response = await http.get(baseUrl+'logistic/'+d.toString()+'/'+a.toString());
-    LogisticClass logisticClass;
+  Future<LogisticClass?> hitApi(d,a) async{
+    var response = await http.get(
+        Uri.parse(
+        baseUrl+'logistic/'+d.toString()+'/'+a.toString()));
+    LogisticClass? logisticClass;
     if(response.statusCode == 200){
       final Map parsed = jsonDecode(response.body.toString());
       logisticClass = LogisticClass.fromJson(parsed);

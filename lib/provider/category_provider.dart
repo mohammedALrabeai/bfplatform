@@ -18,9 +18,11 @@ class CategoryProvider extends ChangeNotifier{
     return _categories.data;
   }
 
-  Future<Category> hitApi() async{
-    var response = await http.get(baseUrl+'categories');
-Category category;
+  Future<Category?> hitApi() async{
+    var response = await http.get(
+        Uri.parse(
+        baseUrl+'categories'));
+Category? category;
     if(response.statusCode == 200){
        final Map parsed = jsonDecode(response.body.toString());
       category = Category.fromJson(parsed);

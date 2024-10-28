@@ -32,7 +32,8 @@ class _PasswordChangeState extends State<PasswordChange> {
     if (newPassword == cpassword) {
       try {
         String url = baseUrl + 'change/password';
-        final _result = await http.post(url,
+        final _result = await http.post(
+            Uri.parse(url),
             body: jsonEncode({
               'currentPassword': currentPassword,
               'newPassword': newPassword
@@ -70,7 +71,7 @@ class _PasswordChangeState extends State<PasswordChange> {
   }
 
   void showInSnackBar(String value) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    (SnackBar(
       padding: EdgeInsets.all(snackBarPadding),
       content: Text(value),
       duration: barDuration,
@@ -171,8 +172,7 @@ class _PasswordChangeState extends State<PasswordChange> {
       child: Scaffold(
           backgroundColor: Colors.white,
           key: _scaffoldKey,
-          appBar:
-              customSingleAppBar(context, 'تغيير كلمة المرور', textWhiteColor),
+        //  appBar: customSingleAppBar(context, 'تغيير كلمة المرور', textWhiteColor),
           body: SingleChildScrollView(
             child: Container(
               decoration: BoxDecoration(
@@ -326,7 +326,7 @@ class _PasswordChangeState extends State<PasswordChange> {
                     height: 20,
                     color: screenWhiteBackground,
                   ),
-                  FlatButton(
+                  MaterialButton(
                     color: primaryColor,
                     child: Container(
                       height: 40,

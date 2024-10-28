@@ -7,7 +7,9 @@ import 'package:many_vendor_app/widget/product_card.dart';
 // ignore: must_be_immutable
 class ProductScreen extends StatefulWidget {
   List<ShopProductData> shopProductData;
-  ProductScreen({this.shopProductData});
+  ProductScreen({
+
+    required this.shopProductData});
   @override
   _ProductScreenState createState() => _ProductScreenState();
 }
@@ -56,7 +58,7 @@ class SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight
         assert(height != null && height > 0);
 
   /// The number of children in the cross axis.
-  final int crossAxisCount;
+  final int? crossAxisCount;
 
   /// The number of logical pixels between each child along the main axis.
   final double mainAxisSpacing;
@@ -68,7 +70,7 @@ class SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight
   final double height;
 
   bool _debugAssertIsValid() {
-    assert(crossAxisCount > 0);
+    assert(crossAxisCount! > 0);
     assert(mainAxisSpacing >= 0.0);
     assert(crossAxisSpacing >= 0.0);
     assert(height > 0.0);
@@ -79,11 +81,11 @@ class SliverGridDelegateWithFixedCrossAxisCountAndFixedHeight
   SliverGridLayout getLayout(SliverConstraints constraints) {
     assert(_debugAssertIsValid());
     final double usableCrossAxisExtent =
-        constraints.crossAxisExtent - crossAxisSpacing * (crossAxisCount - 1);
-    final double childCrossAxisExtent = usableCrossAxisExtent / crossAxisCount;
+        constraints.crossAxisExtent - crossAxisSpacing * (crossAxisCount! - 1);
+    final double childCrossAxisExtent = usableCrossAxisExtent / crossAxisCount!;
     final double childMainAxisExtent = height;
     return SliverGridRegularTileLayout(
-      crossAxisCount: crossAxisCount,
+      crossAxisCount: crossAxisCount!,
       mainAxisStride: childMainAxisExtent + mainAxisSpacing,
       crossAxisStride: childCrossAxisExtent + crossAxisSpacing,
       childMainAxisExtent: childMainAxisExtent,

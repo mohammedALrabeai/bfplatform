@@ -1,17 +1,13 @@
-
-
 class Order {
-  List<OrderData> data;
+  List<OrderData>? data;
 
-  Order({List<OrderData> data}) {
-    data = data;
-  }
+  Order({this.data});
 
   Order.fromJson(dynamic json) {
     if (json["data"] != null) {
       data = [];
       json["data"].forEach((v) {
-        data.add(OrderData.fromJson(v));
+        data!.add(OrderData.fromJson(v));
       });
     }
   }
@@ -19,92 +15,74 @@ class Order {
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     if (data != null) {
-      map["data"] = data.map((v) => v.toJson()).toList();
+      map["data"] = data!.map((v) => v.toJson()).toList();
     }
     return map;
   }
 }
 
-
 class OrderData {
-  int _id;
-  int _userId;
-  String _name;
-  String _orderNumber;
-  String _email;
-  String _toPhone;
-  String _toAddress;
-  String _toDivisionName;
-  String _toAreaName;
-  String _note;
-  String _toLogisticName;
-  String _formPhone;
-  String _formAddress;
-  String _logisticCharge;
-  String _appliedCoupon;
-  String _payAmount;
-  String _paymentType;
-  String _orderDate;
-  List<OrderProduct> _orderProduct;
+  int? _id;
+  int? _userId;
+  String? _name;
+  String? _orderNumber;
+  String? _email;
+  String? _toPhone;
+  String? _toAddress;
+  String? _toDivisionName;
+  String? _toAreaName;
+  String? _note;
+  String? _toLogisticName;
+  String? _formPhone;
+  String? _formAddress;
+  String? _logisticCharge;
+  String? _appliedCoupon;
+  String? _payAmount;
+  String? _paymentType;
+  String? _orderDate;
+  List<OrderProduct>? _orderProduct;
 
-  int get id => _id;
+  int? get id => _id;
+  int? get userId => _userId;
+  String? get name => _name;
+  String? get orderNumber => _orderNumber;
+  String? get email => _email;
+  String? get toPhone => _toPhone;
+  String? get toAddress => _toAddress;
+  String? get toDivisionName => _toDivisionName;
+  String? get toAreaName => _toAreaName;
+  String? get note => _note;
+  String? get toLogisticName => _toLogisticName;
+  String? get formPhone => _formPhone;
+  String? get formAddress => _formAddress;
+  String? get logisticCharge => _logisticCharge;
+  String? get appliedCoupon => _appliedCoupon;
+  String? get payAmount => _payAmount;
+  String? get paymentType => _paymentType;
+  String? get orderDate => _orderDate;
+  List<OrderProduct>? get orderProduct => _orderProduct;
 
-  int get userId => _userId;
-
-  String get name => _name;
-
-  String get orderNumber => _orderNumber;
-
-  String get email => _email;
-
-  String get toPhone => _toPhone;
-
-  String get toAddress => _toAddress;
-
-  String get toDivisionName => _toDivisionName;
-
-  String get toAreaName => _toAreaName;
-
-  String get note => _note;
-
-  String get toLogisticName => _toLogisticName;
-
-  String get formPhone => _formPhone;
-
-  String get formAddress => _formAddress;
-
-  String get logisticCharge => _logisticCharge;
-
-  String get appliedCoupon => _appliedCoupon;
-
-  String get payAmount => _payAmount;
-
-  String get paymentType => _paymentType;
-
-  String get orderDate => _orderDate;
-
-  List<OrderProduct> get orderProduct => _orderProduct;
-
-  OrderData(
-      {int id,
-      int userId,
-      String name,
-      String orderNumber,
-      String email,
-      String toPhone,
-      String toAddress,
-      String toDivisionName,
-      String toAreaName,
-      String note,
-      String toLogisticName,
-      String formPhone,
-      String formAddress,
-      String logisticCharge,
-      String appliedCoupon,
-      String payAmount,
-      String paymentType,
-      String orderDate,
-      List<OrderProduct> orderProduct}) {
+  OrderData({
+    int? id,
+    int? userId,
+    String? name,
+    String? orderNumber,
+    String? email,
+    String? toPhone,
+    String? toAddress,
+    String? toDivisionName,
+    String? toAreaName,
+    String? note,
+    String? toLogisticName,
+    String? formPhone,
+    String? formAddress,
+    String? logisticCharge,
+    String? appliedCoupon,
+    String? payAmount,
+    String? paymentType,
+    String? orderDate,
+    List<OrderProduct>? orderProduct,
+  }) {
     _id = id;
     _userId = userId;
     _name = name;
@@ -148,7 +126,7 @@ class OrderData {
     if (json["orderProduct"] != null) {
       _orderProduct = [];
       json["orderProduct"].forEach((v) {
-        _orderProduct.add(OrderProduct.fromJson(v));
+        _orderProduct!.add(OrderProduct.fromJson(v));
       });
     }
   }
@@ -174,49 +152,41 @@ class OrderData {
     map["paymentType"] = _paymentType;
     map["orderDate"] = _orderDate;
     if (_orderProduct != null) {
-      map["orderProduct"] = _orderProduct.map((v) => v.toJson()).toList();
+      map["orderProduct"] = _orderProduct!.map((v) => v.toJson()).toList();
     }
     return map;
   }
 }
 
-
-
 class OrderProduct {
-  String _bookingCode;
-  String _orderNumber;
-  String _shop;
-  String _productName;
-  String _productImage;
-  String _productPrice;
-  String _quantity;
-  String _status;
+  String? _bookingCode;
+  String? _orderNumber;
+  String? _shop;
+  String? _productName;
+  String? _productImage;
+  String? _productPrice;
+  String? _quantity;
+  String? _status;
 
-  String get bookingCode => _bookingCode;
+  String? get bookingCode => _bookingCode;
+  String? get orderNumber => _orderNumber;
+  String? get shop => _shop;
+  String? get productName => _productName;
+  String? get productImage => _productImage;
+  String? get productPrice => _productPrice;
+  String? get quantity => _quantity;
+  String? get status => _status;
 
-  String get orderNumber => _orderNumber;
-
-  String get shop => _shop;
-
-  String get productName => _productName;
-
-  String get productImage => _productImage;
-
-  String get productPrice => _productPrice;
-
-  String get quantity => _quantity;
-
-  String get status => _status;
-
-  OrderProduct(
-      {String bookingCode,
-      String orderNumber,
-      String shop,
-      String productName,
-      String productImage,
-      String productPrice,
-      String quantity,
-      String status}) {
+  OrderProduct({
+    String? bookingCode,
+    String? orderNumber,
+    String? shop,
+    String? productName,
+    String? productImage,
+    String? productPrice,
+    String? quantity,
+    String? status,
+  }) {
     _bookingCode = bookingCode;
     _orderNumber = orderNumber;
     _shop = shop;

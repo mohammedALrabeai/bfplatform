@@ -34,38 +34,41 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isLoading = true;
   bool isLoadingTow = false;
   bool wait = false;
-  LogisticData logisticData;
+  LogisticData? logisticData;
   // ignore: non_constant_identifier_names
   bool City = false;
   // ignore: non_constant_identifier_names
   double total_price = 0.0; //this is total price with all
-  String offer;
-  String coupon;
-  String token;
+  String? offer;
+  String? coupon;
+  String? token;
   var _coupon = TextEditingController();
   String selectedRole = "cod";
   final _formKey = GlobalKey<FormState>();
-  ReturnCart returnCart;
-  DistrictClass districtClass;
-  List<DistrictData> _list = new List();
-  List<ThanaData> _thanaList = new List();
-  List<LogisticData> _logisticList = new List();
+  ReturnCart? returnCart;
+  DistrictClass? districtClass;
+  List<DistrictData> _list = [];
+  List<ThanaData> _thanaList = [];
+  List<LogisticData> _logisticList = [];
   String orderId = DateTime.now().millisecondsSinceEpoch.toString();
 
   //form keys
   TextEditingController _phone = TextEditingController();
   TextEditingController _address = TextEditingController();
   TextEditingController _orderNote = TextEditingController();
-  String selectDistrict;
-  String selectThana;
+  String? selectDistrict;
+  String? selectThana;
   dynamic selectLogistic = 0;
   dynamic shippingcost;
 
-  List<DropdownMenuItem> items = new List();
-  List<DropdownMenuItem> thanaItems = new List();
+  List<DropdownMenuItem> items = [];
+  List<DropdownMenuItem> thanaItems = [];
 
   _applyCoupon() async {
-    final response = await http.post(baseUrl + 'coupon/store',
+    final response = await http.post(
+
+        Uri.parse(
+        baseUrl + 'coupon/store'),
         body: jsonEncode({'coupon': _coupon.text, 'total': total_price}),
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final data = jsonDecode(response.body);
     if (data['error'] == false) {
       setState(() {
-        returnCart.data.totalPrice = data['after_discount'];
+        returnCart!.data.totalPrice = data['after_discount'];
         coupon = data['coupon'];
         offer = data['discount'].toString();
       });
@@ -83,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
       showInSnackBar(message);
     } else {
       setState(() {
-        returnCart.data.totalPrice = data['total'];
+        returnCart!.data.totalPrice = data['total'];
         offer = null;
         coupon = null;
       });
@@ -95,8 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       wait = true;
     });
-    List<String> list = List();
-    returnCart.data.products.forEach((element) {
+    List<String> list = [];
+    returnCart!.data.products.forEach((element) {
       String data = element.vendorStockId.toString() +
           '-' +
           element.campaignId.toString() +
@@ -121,10 +124,12 @@ class _MyHomePageState extends State<MyHomePage> {
         'address': _address.text,
         'phone': _phone.text,
         'message': _orderNote.text,
-        'total_price': returnCart.data.totalPrice.toStringAsFixed(2)
+        'total_price': returnCart!.data.totalPrice.toStringAsFixed(2)
       };
       final response = await http
-          .post(baseUrl + 'checkout', body: jsonEncode(body), headers: {
+          .post(
+          Uri.parse(
+          baseUrl + 'checkout'), body: jsonEncode(body), headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
@@ -147,10 +152,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void showInSnackBar(String value) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-        padding: EdgeInsets.all(snackBarPadding),
-        duration: barDuration,
-        content: Text(value)));
+    // _scaffoldKey.currentState.showSnackBar(SnackBar(
+    //     padding: EdgeInsets.all(snackBarPadding),
+    //     duration: barDuration,
+    //     content: Text(value)));
   }
 
   _checkAuth() async {
@@ -190,10 +195,10 @@ class _MyHomePageState extends State<MyHomePage> {
       isLoadingTow = true;
       selectDistrict = district;
     });
-    ThanaClass thanaClass =
+    ThanaClass? thanaClass =
         await Provider.of<ThanaProvider>(context, listen: false)
-            .hitApi(selectDistrict);
-    Provider.of<ThanaProvider>(context, listen: false).setData(thanaClass);
+            .hitApi(selectDistrict!);
+    Provider.of<ThanaProvider>(context, listen: false).setData(thanaClass!);
     setState(() {
       thanaItems.clear();
       _thanaList = Provider.of<ThanaProvider>(context, listen: false).getData();

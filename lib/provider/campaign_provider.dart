@@ -23,10 +23,12 @@ class CampaignProvider extends ChangeNotifier{
       return _campaign.data;
     }
 
-    Future<CampaignClass> campaignHitApi(context) async{
-      CampaignClass campaign;
+    Future<CampaignClass?> campaignHitApi(context) async{
+      CampaignClass? campaign;
       try{
-        var response = await http.get(baseUrl+'campaigns');
+        var response = await http.get(
+            Uri.parse(
+            baseUrl+'campaigns'));
 
         if(response.statusCode == 200){
           final Map parsed  = jsonDecode(response.body.toString());

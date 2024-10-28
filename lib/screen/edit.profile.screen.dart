@@ -19,15 +19,15 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   bool isLoading = true;
-  String email;
-  String name;
-  String phone;
-  String address;
-  String avatar;
-  String token;
+  String email="";
+  String name="";
+  String phone="";
+  String address="";
+  String avatar="";
+  String token="";
   bool _isLoading = false;
   /*image pickup*/
-  File _image;
+  File? _image;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final nameC = TextEditingController();
   final phoneC = TextEditingController();
@@ -36,7 +36,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   getUserData() async {
     token = await getToken();
     final url = baseUrl + 'user/data';
-    final response = await http.post(url, headers: {
+    final response = await http.post(
+
+        Uri.parse(
+        url), headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
@@ -66,7 +69,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     });
     try {
       String url = baseUrl + 'update/user';
-      final _result = await http.post(url,
+      final _result = await http.post(
+
+          Uri.parse(
+          url),
           body: jsonEncode({'name': name, 'phone': phone, 'address': address}),
           headers: {
             'Content-Type': 'application/json',
@@ -185,9 +191,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   _imgFromCamera() async {
+    //ImagePicker? path;
     // ignore: deprecated_member_use
-    File image = await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 50);
+    File image = (await ImagePicker.pickImage(
+        source: ImageSource.camera, imageQuality: 50)) ;
     setState(() {
       _image = image;
     });
@@ -215,21 +222,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.headers['authorization'] = 'Bearer $token';
     request.files
-        .add(await http.MultipartFile.fromPath('picture', _image.path));
+        .add(await http.MultipartFile.fromPath('picture', _image!.path));
     var res = await request.send();
     setState(() {
       // ignore: unnecessary_statements
       _isLoading == false;
     });
-    return res.reasonPhrase;
+    return res.reasonPhrase!;
   }
 
   void showInSnackBar(String value) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    SnackBar(
       padding: EdgeInsets.all(snackBarPadding),
       content: Text(value),
       duration: barDuration,
-    ));
+    );
   }
 
   void _showPicker(context) {
@@ -276,7 +283,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         child: Scaffold(
       backgroundColor: Colors.white,
       key: _scaffoldKey,
-      appBar: customSingleAppBar(context, 'لوحة التحكم', textWhiteColor),
+     // appBar: customSingleAppBar(context, 'لوحة التحكم', textWhiteColor),
       body: isLoading
           ? Center(
               child: CircularProgressIndicator(),
@@ -305,7 +312,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     ? ClipRRect(
                                         borderRadius: BorderRadius.circular(50),
                                         child: Image.file(
-                                          _image,
+                                          _image!,
                                           width: 100,
                                           height: 100,
                                           fit: BoxFit.fitHeight,
@@ -430,7 +437,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           height: 10,
                           color: screenWhiteBackground,
                         ),
-                        FlatButton(
+                        MaterialButton(
                           color: primaryColor,
                           child: Container(
                             height: 40,

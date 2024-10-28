@@ -10,7 +10,7 @@ import 'package:many_vendor_app/repository/db_connection.dart';
 class WishlistProvider extends ChangeNotifier{
   bool isLoading = true;
   ShopProductHub _wishlistProductHub = new ShopProductHub();
-  List<ShopProductData> list = new List();
+  List<ShopProductData> list = [];
 
   WishlistProvider(){
     _wishlistProductHub.data = list;
@@ -26,17 +26,19 @@ class WishlistProvider extends ChangeNotifier{
     return _wishlistProductHub.data;
   }
 
-  Future<ShopProductHub> hitApi() async{
+  Future<ShopProductHub?> hitApi() async{
     /*get data form database*/
     DatabaseConnection _connection = DatabaseConnection();
     List<Wishlist> datas = await _connection.fetchWishList();
-    List<int> list = List();
+    List<int> list = [];
     datas.forEach((element) {
       list.add(element.productId);
     });
     String wishlist = jsonEncode(list);
-    var response = await http.post(baseUrl+'wishlist',body: {'wishlists':wishlist});
-    ShopProductHub wishlistProductHub;
+    var response = await http.post(
+        Uri.parse(
+        baseUrl+'wishlist'),body: {'wishlists':wishlist});
+    ShopProductHub? wishlistProductHub;
     if(response.statusCode == 200){
       final Map parsed = jsonDecode(response.body.toString());
       wishlistProductHub = ShopProductHub.fromJson(parsed);

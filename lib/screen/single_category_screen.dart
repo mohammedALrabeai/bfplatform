@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 class SingleCategoryScreen extends StatefulWidget {
   TrendingCategoryData trendingCategoryData;
   int id;
-  SingleCategoryScreen({this.trendingCategoryData, this.id});
+  SingleCategoryScreen({required this.trendingCategoryData,required this.id});
   @override
   _SingleCategoryScreenState createState() => _SingleCategoryScreenState();
 }
@@ -21,7 +21,7 @@ class _SingleCategoryScreenState extends State<SingleCategoryScreen> {
   List<ShopProductData> shopProductData = [];
   bool isLoading = true;
   fetchData() async {
-    ShopProductHub shopProductHub;
+    ShopProductHub? shopProductHub;
     if (widget.id == 0) {
       shopProductHub =
           await Provider.of<ShopProductProvider>(context, listen: false)
@@ -34,7 +34,7 @@ class _SingleCategoryScreenState extends State<SingleCategoryScreen> {
 
     /*set data*/
     Provider.of<ShopProductProvider>(context, listen: false)
-        .setData(shopProductHub);
+        .setData(shopProductHub!);
     setState(() {
       shopProductData =
           Provider.of<ShopProductProvider>(context, listen: false).getData();
@@ -54,7 +54,7 @@ class _SingleCategoryScreenState extends State<SingleCategoryScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: customAppBar(context),
+      //  appBar: customAppBar(context),
         body: isLoading
             ? Center(
                 child: LoaderScreen(),

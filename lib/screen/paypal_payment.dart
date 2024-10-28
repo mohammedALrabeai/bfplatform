@@ -11,7 +11,10 @@ class PaypalPayment extends StatefulWidget {
   final Function onFinish;
   final String amount;
 
-  PaypalPayment({this.onFinish, this.amount});
+  PaypalPayment({
+
+    required this.onFinish,
+    required this.amount});
 
   @override
   State<StatefulWidget> createState() {
@@ -22,8 +25,8 @@ class PaypalPayment extends StatefulWidget {
 class PaypalPaymentState extends State<PaypalPayment> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String checkoutUrl = "";
-  String executeUrl;
-  String accessToken;
+  String? executeUrl;
+  String? accessToken;
   bool loadAll = false;
 
   // you can change default currency according to your need
@@ -52,13 +55,13 @@ class PaypalPaymentState extends State<PaypalPayment> {
             await StripeService.createPaypalPayment(transactions, accessToken);
         if (res != null) {
           setState(() {
-            checkoutUrl = res["approvalUrl"];
+            checkoutUrl = res["approvalUrl"].toString();
             executeUrl = res["executeUrl"];
             loadAll = true;
           });
         }
       } catch (e) {
-        _scaffoldKey.currentState.showSnackBar(SnackBar(
+        (SnackBar(
           padding: EdgeInsets.all(snackBarPadding),
           content: Text(e.toString()),
           duration: barDuration,
@@ -106,7 +109,7 @@ class PaypalPaymentState extends State<PaypalPayment> {
       if (checkoutUrl != null) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Theme.of(context).backgroundColor,
+           // backgroundColor: Theme.of(context).backgroundColor,
             leading: GestureDetector(
               child: Icon(Icons.arrow_back_ios),
               onTap: () => Navigator.pop(context),

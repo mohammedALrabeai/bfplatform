@@ -5,7 +5,11 @@ class Cart{
   int campaignId;
   int quantity;
 
-  Cart({this.id,this.vendorStockId,this.quantity,this.campaignId});
+  Cart({
+     this.id=0,
+     this.vendorStockId=0,
+     this.quantity=0,
+     this.campaignId=0});
 
   Map<String, dynamic> toMap(){
     return <String, dynamic>{
@@ -23,7 +27,9 @@ class Wishlist{
   int id;
   int productId;
 
-  Wishlist({this.id,this.productId});
+  Wishlist({
+     this.id=0,
+     this.productId=0});
 
   Map<String, dynamic> toMap(){
     return <String, dynamic>{

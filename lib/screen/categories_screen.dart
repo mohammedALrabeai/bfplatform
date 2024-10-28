@@ -19,9 +19,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   bool isLoading = true;
 
   getData() async {
-    Category category =
+    Category? category =
         await Provider.of<CategoryProvider>(context, listen: false).hitApi();
-    Provider.of<CategoryProvider>(context, listen: false).setData(category);
+    Provider.of<CategoryProvider>(context, listen: false).setData(category!);
     setState(() {
       categories =
           Provider.of<CategoryProvider>(context, listen: false).getData();
@@ -41,7 +41,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return SafeArea(
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: customAppBar(context),
+          //appBar: customAppBar(context),
           drawer: Drawer(
             child: DrawerScreen(),
           ),
@@ -67,11 +67,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                 ),
                                 key: PageStorageKey<int>(1),
                                 title: Text(
-                                  categories[index].name,
+                                  categories[index].name!,
                                   style: menuStyle,
                                 ),
                                 children: parentCategory(
-                                    categories[index].parent, context),
+                                    categories[index].parent!, context),
                               ),
                             );
                           }),
@@ -97,7 +97,7 @@ List<Widget> parentCategory(List<Parent> parent, context) {
           element.name.toString(),
           style: menuStyle,
         ),
-        children: childCategory(element.child, context),
+        children: childCategory(element.child!, context),
       ),
     ));
   });
@@ -111,17 +111,17 @@ List<Widget> childCategory(List<Child> child, context) {
       color: Colors.white,
       child: ListTile(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SingleCategoryScreen(
-                          trendingCategoryData: null,
-                          id: element.id,
-                        )));
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => SingleCategoryScreen(
+            //               trendingCategoryData: null,
+            //               id: element.id,
+            //             )));
           },
           title: Center(
             child: Text(
-              element.name,
+              element.name!,
               style: menuStyle,
             ),
           )),

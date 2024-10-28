@@ -1,58 +1,37 @@
-
-
 class DistrictClass {
-  List<DistrictData> data;
+  List<DistrictData> data; // Made non-nullable
 
+  DistrictClass({List<DistrictData>? data})
+      : data = data ?? []; // Initialize with an empty list if null
 
-  DistrictClass({List<DistrictData> data}){
-    data = data;
-  }
-
-  DistrictClass.fromJson(dynamic json) {
-    if (json["data"] != null) {
-      data = [];
-      json["data"].forEach((v) {
-        data.add(DistrictData.fromJson(v));
-      });
-    }
-  }
+  DistrictClass.fromJson(Map<String, dynamic> json)
+      : data = (json["data"] as List<dynamic>? ?? [])
+            .map((v) => DistrictData.fromJson(v))
+            .toList(); // Use list comprehension
 
   Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    if (data != null) {
-      map["data"] = data.map((v) => v.toJson()).toList();
-    }
-    return map;
+    return {
+      "data": data.map((v) => v.toJson()).toList(),
+    };
   }
-
 }
-
-
 
 class DistrictData {
-  int _id;
-  String _district;
+  int id; // Made non-nullable
+  String district; // Made non-nullable
 
-  int get id => _id;
-  String get district => _district;
+  DistrictData(
+      {required this.id,
+      required this.district}); // Use required for non-nullable fields
 
-  DistrictData({
-      int id,
-      String district}){
-    _id = id;
-    _district = district;
-}
-
-  DistrictData.fromJson(dynamic json) {
-    _id = json["id"];
-    _district = json["district"];
-  }
+  DistrictData.fromJson(Map<String, dynamic> json)
+      : id = json["id"],
+        district = json["district"];
 
   Map<String, dynamic> toJson() {
-    var map = <String, dynamic>{};
-    map["id"] = _id;
-    map["district"] = _district;
-    return map;
+    return {
+      "id": id,
+      "district": district,
+    };
   }
-
 }

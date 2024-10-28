@@ -21,11 +21,14 @@ class BrandProvider extends ChangeNotifier{
     return _brand.data;
   }
 
- Future<BrandClass>  brandHitApi(context) async{
-   BrandClass brand;
+ Future<BrandClass?>  brandHitApi(context) async{
+   BrandClass? brand;
     try{
 
-      var response = await http.get(baseUrl+'brands');
+      var response = await http.get(
+
+          Uri.parse(
+          baseUrl+'brands'));
 
       if(response.statusCode == 200){
         final Map parsed = jsonDecode(response.body.toString());

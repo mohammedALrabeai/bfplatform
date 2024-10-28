@@ -1,20 +1,13 @@
-
-
 class ShopProductHub {
-  List<ShopProductData> data;
+  List<ShopProductData>? data;
 
-
-
-  ShopProductHub({
-      List<ShopProductData> data}){
-    data = data;
-}
+  ShopProductHub({this.data});
 
   ShopProductHub.fromJson(dynamic json) {
     if (json["data"] != null) {
       data = [];
       json["data"].forEach((v) {
-        data.add(ShopProductData.fromJson(v));
+        data!.add(ShopProductData.fromJson(v));
       });
     }
   }
@@ -22,74 +15,54 @@ class ShopProductHub {
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     if (data != null) {
-      map["data"] = data.map((v) => v.toJson()).toList();
+      map["data"] = data!.map((v) => v.toJson()).toList();
     }
     return map;
   }
-
 }
-
 
 class ShopProductData {
-  dynamic _productId;
-  String _name;
-  String _image;
-  String _slug;
-  int _sku;
-  String _discount;
-  bool _discountHave;
-  String _price;
-
-  dynamic get productId => _productId;
-  String get name => _name;
-  String get image => _image;
-  String get slug => _slug;
-  int get sku => _sku;
-  String get discount => _discount;
-  bool get discountHave => _discountHave;
-  String get price => _price;
+  dynamic productId;
+  String? name;
+  String? image;
+  String? slug;
+  int? sku;
+  String? discount;
+  bool? discountHave;
+  String? price;
 
   ShopProductData({
-      dynamic productId, 
-      String name, 
-      String image, 
-      String slug, 
-      int sku, 
-      String discount, 
-      bool discountHave,
-      String price}){
-    _productId = productId;
-    _name = name;
-    _image = image;
-    _slug = slug;
-    _sku = sku;
-    _discount = discount;
-    _discountHave = discountHave;
-    _price = price;
-}
+    this.productId,
+    this.name,
+    this.image,
+    this.slug,
+    this.sku,
+    this.discount,
+    this.discountHave,
+    this.price,
+  });
 
   ShopProductData.fromJson(dynamic json) {
-    _productId = json["productId"];
-    _name = json["name"];
-    _image = json["image"];
-    _slug = json["slug"];
-    _sku = json["sku"];
-    _discount = json["discount"];
-    _discountHave = json["discountHave"];
-    _price = json["price"];
+    productId = json["productId"];
+    name = json["name"];
+    image = json["image"];
+    slug = json["slug"];
+    sku = json["sku"];
+    discount = json["discount"];
+    discountHave = json["discountHave"];
+    price = json["price"];
   }
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
-    map["productId"] = _productId;
-    map["name"] = _name;
-    map["image"] = _image;
-    map["slug"] = _slug;
-    map["sku"] = _sku;
-    map["discount"] = _discount;
-    map["discountHave"] = _discountHave;
-    map["price"] = _price;
+    map["productId"] = productId;
+    map["name"] = name;
+    map["image"] = image;
+    map["slug"] = slug;
+    map["sku"] = sku;
+    map["discount"] = discount;
+    map["discountHave"] = discountHave;
+    map["price"] = price;
     return map;
   }
-
 }

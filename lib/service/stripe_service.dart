@@ -1,22 +1,24 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:flutter_stripe_payment/flutter_stripe_payment.dart';
 import 'package:http/http.dart' as http;
 import 'package:many_vendor_app/helper/helper.dart';
-import 'package:stripe_payment/stripe_payment.dart';
+//import 'package:stripe_payment/stripe_payment.dart';
 import 'dart:async';
 import 'dart:convert' as convert;
 import 'package:http_auth/http_auth.dart';
 
 class StripeTransactionResponse {
-  String message;
-  bool success;
-  StripeTransactionResponse({this.message, this.success});
+ final String message;
+ final bool success;
+  StripeTransactionResponse({
+   required this.message,required this.success});
 }
 
 class StripeService {
 
   String paymentApiUrl = 'https://api.stripe.com/v1/payment_intents';
- static String secret;
+  static  String secret="";
   static String publishableKey = "";
   /*payment*/
 
@@ -43,16 +45,19 @@ class StripeService {
    // ignore: non_constant_identifier_names
    String STORE_PASSWORD = "";
 
-  bool stripeActive;
-  bool paypalActive;
-  bool paytmActive;
-  bool sslActive;
+  bool? stripeActive;
+  bool? paypalActive;
+  bool? paytmActive;
+  bool? sslActive;
 
   StripeService(){
     loadPayment();
   }
   loadPayment() async{
-    var response = await http.get(baseUrl+'payment/setting');
+    var response = await http.get(
+        Uri.parse(
+        baseUrl+'payment/setting')
+    );
     if(response.statusCode == 200){
       var payments = jsonDecode(response.body.toString());
 
@@ -89,6 +94,7 @@ class StripeService {
   };
 
    init() {
+     FlutterStripePayment.
     StripePayment.setOptions(
         StripeOptions(
             publishableKey: StripeService.publishableKey,
@@ -98,7 +104,9 @@ class StripeService {
     );
   }
 
-   Future<StripeTransactionResponse> payViaExistingCard({String amount, String currency, CreditCard card}) async{
+   Future<StripeTransactionResponse> payViaExistingCard(
+
+     String amount, String currency, CreditCard car) async{
     try {
       var paymentMethod = await StripePayment.createPaymentMethod(
           PaymentMethodRequest(card: card)

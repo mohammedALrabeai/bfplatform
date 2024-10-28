@@ -9,7 +9,8 @@ import 'package:many_vendor_app/model/order.dart';
 class OrderDetailsScreen extends StatefulWidget {
   OrderData order;
 
-  OrderDetailsScreen({this.order});
+  OrderDetailsScreen({
+    required this.order});
 
   @override
   _OrderDetailsScreenState createState() => _OrderDetailsScreenState();
@@ -298,7 +299,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      appBar: customSingleAppBar(context, 'Order Details', textWhiteColor),
+     // appBar: customSingleAppBar(context, 'Order Details', textWhiteColor),
       body: Container(
         decoration: BoxDecoration(
             image: DecorationImage(

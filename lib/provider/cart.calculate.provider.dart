@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class CartCalculationProvider extends ChangeNotifier{
   DatabaseConnection _connection = new DatabaseConnection();
-  int quantity;
+  int? quantity;
   double price =0;
   double subPrice =0;
 
@@ -79,7 +79,7 @@ class CartCalculationProvider extends ChangeNotifier{
 
 
 class TotalPayment extends ChangeNotifier{
-  int quantity;
+  int? quantity;
   double price =0;
   double subPrice =0;
 

@@ -9,14 +9,14 @@ import 'package:http/http.dart' as http;
 
 class ReturnCartProvider extends ChangeNotifier{
 
-  ReturnCart _returnCart =  ReturnCart();
+  ReturnCart? _returnCart =  ReturnCart();
   CartData  _cartData = CartData();
 
   ReturnCartProvider(){
-    _returnCart.data = _cartData;
+    _returnCart!.data = _cartData;
   }
 
-  setData(ReturnCart returnCart){
+  setData(ReturnCart? returnCart){
     _returnCart = returnCart;
     notifyListeners();
   }
@@ -38,7 +38,9 @@ class ReturnCartProvider extends ChangeNotifier{
     });
     print('cart list ${list.toString()}');
     String cartsJson = jsonEncode(list);
-    var response = await http.get(baseUrl+'shop/carts/'+cartsJson);
+    var response = await http.get(
+      Uri.parse(
+        baseUrl+'shop/carts/'+cartsJson));
 
     if(response.statusCode == 200){
       final Map parsed = jsonDecode(response.body.toString());

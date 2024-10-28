@@ -8,14 +8,15 @@ import 'package:many_vendor_app/provider/variant_satus.dart';
 import 'package:many_vendor_app/repository/db_connection.dart';
 import 'package:many_vendor_app/screen/single_product_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+//import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class ProductCard extends StatefulWidget {
   final double size;
   final ShopProductData product;
 
-  ProductCard({Key key, @required this.size, this.product}) : super(key: key);
+  ProductCard({Key? key, required this.size, required this.product})
+      : super(key: key);
 
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -62,18 +63,19 @@ class _ProductCardState extends State<ProductCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        pushNewScreen(context,
-            screen: MultiProvider(
-              providers: [
-                ChangeNotifierProvider<ProductDetailsProvider>.value(
-                    value: ProductDetailsProvider()),
-                ChangeNotifierProvider<VariantStatus>.value(
-                    value: VariantStatus()),
-              ],
-              child: SingleProductScreen(
-                shopProductData: widget.product,
-              ),
-            ));
+        /// need to explain
+        // pushNewScreen(context,
+        //     screen: MultiProvider(
+        //       providers: [
+        //         ChangeNotifierProvider<ProductDetailsProvider>.value(
+        //             value: ProductDetailsProvider()),
+        //         ChangeNotifierProvider<VariantStatus>.value(
+        //             value: VariantStatus()),
+        //       ],
+        //       child: SingleProductScreen(
+        //         shopProductData: widget.product,
+        //       ),
+        //     ));
       },
       child: Card(
         margin: EdgeInsets.all(8),
@@ -97,7 +99,7 @@ class _ProductCardState extends State<ProductCard> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: CachedNetworkImage(
-                              imageUrl: widget.product.image,
+                              imageUrl: widget.product.image!,
                               fit: BoxFit.cover,
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) => Center(
@@ -140,7 +142,7 @@ class _ProductCardState extends State<ProductCard> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    widget.product.name,
+                    widget.product.name!,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 12,
@@ -152,7 +154,7 @@ class _ProductCardState extends State<ProductCard> {
                     height: 10,
                   ),
                   Text(
-                    widget.product.price,
+                    widget.product.price!,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 12,

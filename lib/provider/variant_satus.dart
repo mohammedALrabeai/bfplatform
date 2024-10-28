@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:many_vendor_app/model/product_details.dart';
 
 class VariantStatus extends ChangeNotifier {
-  bool active;
-  int variantId;
+  bool active =false;
+  int variantId=0;
   List<Variant> allVariant = [];
 
   setVariant(List<Variant> variant) {

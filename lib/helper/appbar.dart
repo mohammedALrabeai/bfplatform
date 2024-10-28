@@ -8,7 +8,7 @@ import 'package:many_vendor_app/screen/cart_screen.dart';
 import 'package:provider/provider.dart';
 import 'helper.dart';
 
-Widget customAppBar(BuildContext context) {
+AppBar customAppBar(BuildContext context) {
   Provider.of<CartCount>(context, listen: false).totalQuantity();
   return AppBar(
     toolbarHeight: 100,
@@ -39,18 +39,18 @@ Widget customAppBar(BuildContext context) {
             ),
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MultiProvider(providers: [
-                              ChangeNotifierProvider<CartCount>.value(
-                                  value: CartCount()),
-                              ChangeNotifierProvider<ReturnCartProvider>.value(
-                                  value: ReturnCartProvider()),
-                              ChangeNotifierProvider<
-                                      CartCalculationProvider>.value(
-                                  value: CartCalculationProvider()),
-                            ], child: CartScreen())));
+                // Navigator.push(
+                //    this.context,
+                //     MaterialPageRoute(
+                //         builder: (context) => MultiProvider(providers: [
+                //               ChangeNotifierProvider<CartCount>.value(
+                //                   value: CartCount()),
+                //               ChangeNotifierProvider<ReturnCartProvider>.value(
+                //                   value: ReturnCartProvider()),
+                //               ChangeNotifierProvider<
+                //                       CartCalculationProvider>.value(
+                //                   value: CartCalculationProvider()),
+                //             ], child: CartScreen())));
               },
               child: Stack(
                 children: <Widget>[
@@ -76,7 +76,8 @@ Widget customAppBar(BuildContext context) {
                               right: 1,
                               child: Center(
                                 child: Text(
-                                  context.watch<CartCount>().count.toString(),
+                                  "context.watch<CartCount>().count.toString(),",
+                                  //context.watch<CartCount>().count.toString(),
                                   style: TextStyle(
                                       color: primaryColor,
                                       fontSize: 11.0,

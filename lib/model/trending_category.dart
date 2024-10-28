@@ -1,19 +1,13 @@
-
-
 class TrendingCategoryHub {
-  List<TrendingCategoryData> data;
+  List<TrendingCategoryData>? data;
 
-
-  TrendingCategoryHub({
-      List<TrendingCategoryData> data}){
-    data = data;
-}
+  TrendingCategoryHub({this.data});
 
   TrendingCategoryHub.fromJson(dynamic json) {
     if (json["data"] != null) {
       data = [];
       json["data"].forEach((v) {
-        data.add(TrendingCategoryData.fromJson(v));
+        data!.add(TrendingCategoryData.fromJson(v));
       });
     }
   }
@@ -21,44 +15,30 @@ class TrendingCategoryHub {
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
     if (data != null) {
-      map["data"] = data.map((v) => v.toJson()).toList();
+      map["data"] = data!.map((v) => v.toJson()).toList();
     }
     return map;
   }
-
 }
-
 
 class TrendingCategoryData {
-  int _catId;
-  String _name;
-  String _image;
+  int? catId;
+  String? name;
+  String? image;
 
-  int get catId => _catId;
-  String get name => _name;
-  String get image => _image;
-
-  TrendingCategoryData({
-      int catId, 
-      String name, 
-      String image}){
-    _catId = catId;
-    _name = name;
-    _image = image;
-}
+  TrendingCategoryData({this.catId, this.name, this.image});
 
   TrendingCategoryData.fromJson(dynamic json) {
-    _catId = json["catId"];
-    _name = json["name"];
-    _image = json["image"];
+    catId = json["catId"];
+    name = json["name"];
+    image = json["image"];
   }
 
   Map<String, dynamic> toJson() {
     var map = <String, dynamic>{};
-    map["catId"] = _catId;
-    map["name"] = _name;
-    map["image"] = _image;
+    map["catId"] = catId;
+    map["name"] = name;
+    map["image"] = image;
     return map;
   }
-
 }

@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
         indicatorColor: secondaryColor,
         brightness: Brightness.light,
         fontFamily: fontFamily,
-        textSelectionColor: secondaryColor,
+       // textSelectionColor: secondaryColor,
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
@@ -63,7 +63,8 @@ class PageScreen extends StatefulWidget {
 }
 
 class _PageScreenState extends State<PageScreen> {
-  List<SliderImage> pageSlider = new List<SliderImage>();
+  List<SliderImage> pageSlider = [];
+  //new List<SliderImage>();
   int currentIndex = 0;
   PageController pageController = new PageController(initialPage: 0);
 
@@ -110,7 +111,7 @@ class _PageScreenState extends State<PageScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  FlatButton(
+                  MaterialButton(
                     height: 25,
                     color: Colors.white,
                     shape: RoundedRectangleBorder(
@@ -138,7 +139,7 @@ class _PageScreenState extends State<PageScreen> {
                               ? pageIndexIndicator(true)
                               : pageIndexIndicator(false)
                       ]),
-                  FlatButton(
+                  MaterialButton(
                     height: 25,
                     color: primaryColor,
                     textColor: Colors.white,
@@ -166,7 +167,7 @@ class _PageScreenState extends State<PageScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  FlatButton(
+                  MaterialButton(
                     onPressed: () {
                       Navigator.pushReplacement(
                         context,
@@ -193,7 +194,7 @@ class _PageScreenState extends State<PageScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      FlatButton(
+                      MaterialButton(
                         height: 25,
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
@@ -218,7 +219,7 @@ class _PageScreenState extends State<PageScreen> {
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                      FlatButton(
+                      MaterialButton(
                         height: 25,
                         color: primaryColor,
                         textColor: Colors.white,
@@ -262,9 +263,10 @@ class _PageScreenState extends State<PageScreen> {
 
 // ignore: must_be_immutable
 class SliderTile extends StatelessWidget {
-  SliderImage sliderImage = new SliderImage();
+ final SliderImage sliderImage;
+  //= new SliderImage();
 
-  SliderTile({this.sliderImage});
+  SliderTile({required this.sliderImage});
 
   @override
   Widget build(BuildContext context) {

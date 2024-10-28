@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class OrderProvider extends ChangeNotifier {
   Order order = new Order();
-  List<OrderData> orderDataList = new List();
+  List<OrderData> orderDataList =[];
 
   OrderProvider() {
     order.data = orderDataList;
@@ -22,15 +22,18 @@ class OrderProvider extends ChangeNotifier {
     return orderDataList;
   }
 
-  Future<Order> hitApi(tok) async {
+  Future<Order?> hitApi(tok) async {
     var token = await getToken();
     var headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
     };
-    var response = await http.get(baseUrl + 'order/list', headers: headers);
-    Order orderData;
+    var response = await http.get(
+
+        Uri.parse(
+        baseUrl + 'order/list'), headers: headers);
+    Order? orderData;
     if (response.statusCode == 200) {
       final Map parsed = jsonDecode(response.body.toString());
       orderData = Order.fromJson(parsed);

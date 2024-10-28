@@ -16,17 +16,17 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   bool isLoading = true;
-  String email;
-  String name;
-  String avatar;
-  String token;
+  String email="";
+  String name="";
+  String avatar="";
+  String token="";
 
   List<OrderData> orderList = [];
 
   getData() async {
-    Order order =
+    Order? order =
         await Provider.of<OrderProvider>(context, listen: false).hitApi(token);
-    Provider.of<OrderProvider>(context, listen: false).setDate(order);
+    Provider.of<OrderProvider>(context, listen: false).setDate(order!);
     setState(() {
       orderList = Provider.of<OrderProvider>(context, listen: false).getData();
       isLoading = false;
@@ -62,7 +62,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      appBar: customSingleAppBar(context, 'قائمة الطلبات', textWhiteColor),
+     // appBar: customSingleAppBar(context, 'قائمة الطلبات', textWhiteColor),
       body: isLoading
           ? LoaderScreen()
           : orderList.length == 0

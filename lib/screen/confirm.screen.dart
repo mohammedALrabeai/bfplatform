@@ -7,7 +7,8 @@ import 'package:many_vendor_app/screen/home_screen.dart';
 // ignore: must_be_immutable
 class ConfirmScreen extends StatefulWidget {
   String title;
-  ConfirmScreen({this.title});
+  ConfirmScreen({
+    required this.title});
   @override
   _ConfirmScreenState createState() => _ConfirmScreenState();
 }
@@ -60,7 +61,7 @@ class _ConfirmScreenState extends State<ConfirmScreen> {
               Divider(
                 height: 30,
               ),
-              FlatButton(
+              MaterialButton(
                 color: primaryColor,
                 child: Text(
                   'عد للتسوق',

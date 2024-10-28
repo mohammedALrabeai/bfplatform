@@ -9,7 +9,7 @@ import 'package:many_vendor_app/model/shop_product.dart';
 class ShopProductProvider extends ChangeNotifier{
   bool isLoading = true;
   ShopProductHub _shopProductHub = new ShopProductHub();
-  List<ShopProductData> list = new List();
+  List<ShopProductData> list =[];
 
   ShopProductProvider(){
     _shopProductHub.data = list;
@@ -25,9 +25,11 @@ class ShopProductProvider extends ChangeNotifier{
     return _shopProductHub.data;
   }
 
-  Future<ShopProductHub> hitApi(id) async{
-    var response = await http.get(baseUrl+'shop/product/'+id.toString());
-    ShopProductHub shopProductHub;
+  Future<ShopProductHub?> hitApi(id) async{
+    var response = await http.get(
+        Uri.parse(
+        baseUrl+'shop/product/'+id.toString()));
+    ShopProductHub? shopProductHub;
     if(response.statusCode == 200){
       final Map parsed = jsonDecode(response.body.toString());
        shopProductHub = ShopProductHub.fromJson(parsed);
@@ -36,9 +38,11 @@ class ShopProductProvider extends ChangeNotifier{
   }
 
 
-  Future<ShopProductHub> catProductHitApi(id) async{
-    var response = await http.get(baseUrl+'shop/cat/product/'+id);
-    ShopProductHub shopProductHub;
+  Future<ShopProductHub?> catProductHitApi(id) async{
+    var response = await http.get(
+        Uri.parse(
+        baseUrl+'shop/cat/product/'+id));
+    ShopProductHub? shopProductHub;
     if(response.statusCode == 200){
       final Map parsed = jsonDecode(response.body.toString());
       shopProductHub = ShopProductHub.fromJson(parsed);
@@ -46,9 +50,11 @@ class ShopProductProvider extends ChangeNotifier{
     return shopProductHub;
   }
 
-  Future<ShopProductHub> allProduct(name) async{
-    var response = await http.get(baseUrl+'search/product/'+name);
-    ShopProductHub shopProductHub;
+  Future<ShopProductHub?> allProduct(name) async{
+    var response = await http.get(
+        Uri.parse(
+        baseUrl+'search/product/'+name));
+    ShopProductHub? shopProductHub;
     if(response.statusCode == 200){
       final Map parsed = jsonDecode(response.body.toString());
       shopProductHub = ShopProductHub.fromJson(parsed);

@@ -7,7 +7,7 @@ import 'package:many_vendor_app/model/trending_category.dart';
 
 class TrendingCategoryProvider extends ChangeNotifier{
   TrendingCategoryHub _trendingCategoryHub  = TrendingCategoryHub();
-  List<TrendingCategoryData> list = new List();
+  List<TrendingCategoryData> list = [];
 
   TrendingCategoryProvider(){
     _trendingCategoryHub.data = list;
@@ -22,9 +22,12 @@ class TrendingCategoryProvider extends ChangeNotifier{
     return _trendingCategoryHub.data;
   }
 
-  Future<TrendingCategoryHub> hitApi() async {
-    var response = await http.get(baseUrl+'trending/categories');
-    TrendingCategoryHub trendingCategoryHub;
+  Future<TrendingCategoryHub?> hitApi() async {
+    var response = await http.get(
+
+        Uri.parse(
+        baseUrl+'trending/categories'));
+    TrendingCategoryHub? trendingCategoryHub;
     if(response.statusCode == 200){
       final Map parsed = jsonDecode(response.body.toString());
       trendingCategoryHub = TrendingCategoryHub.fromJson(parsed);

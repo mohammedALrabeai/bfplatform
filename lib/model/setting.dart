@@ -1,10 +1,12 @@
 
 class AppSetting{
-  final int id;
-  String type;
-  String value;
+   int id;
+  final String type;
+  final String value;
 
-  AppSetting({this.id,this.type,this.value});
+  AppSetting({this.id=0,
+    required this.type,
+    required this.value});
 
   Map<String, dynamic> toMap(){
     return <String,dynamic>{

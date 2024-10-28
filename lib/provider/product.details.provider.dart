@@ -10,7 +10,7 @@ class ProductDetailsProvider extends ChangeNotifier{
   Product _product = new Product();
   List<Variants> variants =[];
   /*this for variant change */
-  Variant variant;
+  Variant? variant;
 
   ProductDetailsProvider(){
     _details.data = _product;
@@ -31,9 +31,11 @@ class ProductDetailsProvider extends ChangeNotifier{
     return variants;
   }
 
-  Future<ProductDetails> hitApi(id) async{
-    var response = await http.get(baseUrl+'product/'+id.toString());
-    ProductDetails details;
+  Future<ProductDetails?> hitApi(id) async{
+    var response = await http.get(
+        Uri.parse(
+        baseUrl+'product/'+id.toString()));
+    ProductDetails? details;
     if(response.statusCode == 200){
       final Map parsed = jsonDecode(response.body.toString());
       details = ProductDetails.fromJson(parsed);

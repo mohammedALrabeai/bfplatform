@@ -9,14 +9,14 @@ import 'package:http/http.dart' as http;
 
 class DistrictProvider extends ChangeNotifier{
   DistrictClass _districtClass = new DistrictClass();
-  List<DistrictData> list = new List();
+  List<DistrictData> list = [];
 
   DistrictProvider(){
     _districtClass.data = list;
   }
 
-  setData(DistrictClass districtClass){
-    _districtClass = districtClass;
+  setData(DistrictClass? districtClass){
+    _districtClass = districtClass!;
     notifyListeners();
   }
 
@@ -24,9 +24,12 @@ class DistrictProvider extends ChangeNotifier{
    return _districtClass.data;
   }
 
-  Future<DistrictClass> htiApi()async {
-    var response= await http.get(baseUrl+'districts');
-    DistrictClass districtClass;
+  Future<DistrictClass?> htiApi()async {
+    var response= await http.get(
+        Uri.parse(
+
+        baseUrl+'districts'));
+    DistrictClass? districtClass;
     if(response.statusCode == 200){
       final Map parsed = jsonDecode(response.body.toString());
       districtClass = DistrictClass.fromJson(parsed);

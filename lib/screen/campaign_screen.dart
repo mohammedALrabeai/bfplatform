@@ -35,7 +35,7 @@ class _CampaignScreenState extends State<CampaignScreen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      appBar: customAppBar(context),
+     // appBar: customAppBar(context),
       body: isLoading
           ? LoaderScreen()
           : Container(

@@ -24,7 +24,6 @@ import 'package:many_vendor_app/screen/single.campaign.screen.dart';
 import 'package:many_vendor_app/screen/single_brand.dart';
 import 'package:many_vendor_app/screen/single_category_screen.dart';
 import 'package:many_vendor_app/screen/single_shop_screen.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:many_vendor_app/provider/shop_product_provider.dart';
 
@@ -41,49 +40,49 @@ class _MainScreenState extends State<MainScreen>
   List<BrandData> brand = [];
   bool isLoading = true;
   List<CampaignData> _campaignData = [];
-  List<ShopData> shop;
+  List<ShopData> shop=[];
 
   String search = "";
   bool hasSearched = false;
 
   List<TrendingCategoryData> list = [];
   bool isLoadingForCat = true;
-  TabController _tabController;
+  TabController? _tabController;
   int tabIndex = 0;
 
   hitCampaignApi() async {
     /*set campaign data*/
-    CampaignClass campaign =
+    CampaignClass? campaign =
         await Provider.of<CampaignProvider>(context, listen: false)
             .campaignHitApi(context);
     //  set data
-    Provider.of<CampaignProvider>(context, listen: false).setData(campaign);
+    Provider.of<CampaignProvider>(context, listen: false).setData(campaign!);
 
     /*category for tab*/
-    TrendingCategoryHub trendingCategoryHub =
+    TrendingCategoryHub? trendingCategoryHub =
         await Provider.of<TrendingCategoryProvider>(context, listen: false)
             .hitApi();
     Provider.of<TrendingCategoryProvider>(context, listen: false)
-        .setData(trendingCategoryHub);
+        .setData(trendingCategoryHub!);
 
     /*trading product*/
-    ShopProductHub shopProduct =
+    ShopProductHub? shopProduct =
         await Provider.of<TradingProductProvider>(context, listen: false)
             .hitApi();
     /*set data*/
     Provider.of<TradingProductProvider>(context, listen: false)
-        .setData(shopProduct);
+        .setData(shopProduct!);
 
     /*set brand data tab brand*/
-    BrandClass brandClass =
+    BrandClass? brandClass =
         await Provider.of<BrandProvider>(context, listen: false)
             .brandHitApi(context);
-    Provider.of<BrandProvider>(context, listen: false).setData(brandClass);
+    Provider.of<BrandProvider>(context, listen: false).setData(brandClass!);
 
     /*set shop data tab shop*/
-    ShopHub shopHub =
+    ShopHub? shopHub =
         await Provider.of<ShopProvider>(context, listen: false).hitApi(context);
-    Provider.of<ShopProvider>(context, listen: false).setData(shopHub);
+    Provider.of<ShopProvider>(context, listen: false).setData(shopHub!);
 
     setState(() {
       /*campaign*/
@@ -103,13 +102,13 @@ class _MainScreenState extends State<MainScreen>
   }
 
   fetchData(query) async {
-    ShopProductHub shopProductHub =
+    ShopProductHub? shopProductHub =
         await Provider.of<ShopProductProvider>(context, listen: false)
             .allProduct(query);
 
     /*set data*/
     Provider.of<ShopProductProvider>(context, listen: false)
-        .setData(shopProductHub);
+        .setData(shopProductHub!);
     setState(() {
       shopProductData2 =
           Provider.of<ShopProductProvider>(context, listen: false).getData() ??
@@ -128,7 +127,7 @@ class _MainScreenState extends State<MainScreen>
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController!.dispose();
     super.dispose();
   }
 
@@ -136,8 +135,8 @@ class _MainScreenState extends State<MainScreen>
     /*here the update the database*/
     DatabaseConnection _databaseConnection = DatabaseConnection();
     final appSetting = AppSetting(
-      type: 'slid_screen',
-      value: 'off',
+      type: 'slid_screen'.toString(),
+      value: 'off'.toString(),
     );
     await _databaseConnection.addSystemItem(appSetting);
   }
@@ -145,7 +144,7 @@ class _MainScreenState extends State<MainScreen>
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
-    _tabController.addListener(_handleTabSelection);
+    _tabController!.addListener(_handleTabSelection);
     statusCheck(context);
     // fetchData('all');
     hitCampaignApi();
@@ -154,15 +153,16 @@ class _MainScreenState extends State<MainScreen>
   }
 
   _handleTabSelection() {
-    if (_tabController.indexIsChanging) {
+    if (_tabController!.indexIsChanging) {
       setState(() {
-        tabIndex = _tabController.index;
+        tabIndex = _tabController!.index;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    _tabController= TabController(length: 3, vsync: this);
     List<Widget> campaignWidget = [];
     Size size = MediaQuery.of(context).size;
     try {
@@ -221,7 +221,7 @@ class _MainScreenState extends State<MainScreen>
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: customAppBar(context),
+       // appBar: customAppBar(context),
         drawer: Drawer(
           child: DrawerScreen(),
         ),
@@ -513,15 +513,15 @@ class _MainScreenState extends State<MainScreen>
                                         int index) =>
                                     GestureDetector(
                                       onTap: () {
-                                        pushNewScreenWithRouteSettings(
-                                          context,
-                                          screen: SingleShopScreen(
-                                              shopData: shop[index]),
-                                          withNavBar: true,
-                                          pageTransitionAnimation:
-                                              PageTransitionAnimation.cupertino,
-                                          settings: null,
-                                        );
+                                        // pushNewScreenWithRouteSettings(
+                                        //   context,
+                                        //   screen: SingleShopScreen(
+                                        //       shopData: shop[index]),
+                                        //   withNavBar: true,
+                                        //   pageTransitionAnimation:
+                                        //       PageTransitionAnimation.cupertino,
+                                        //   settings: null,
+                                        // );
                                       },
                                       child: Card(
                                         elevation: 1,
@@ -630,7 +630,7 @@ class _MainScreenState extends State<MainScreen>
                                   children: [
                                     _campaignData.length == 0
                                         ? Container()
-                                        : FlatButton(
+                                        : MaterialButton(
                                             child: Text(
                                               'رؤية الكل',
                                               style: TextStyle(

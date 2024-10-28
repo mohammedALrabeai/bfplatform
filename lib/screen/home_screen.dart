@@ -29,7 +29,7 @@ import 'package:many_vendor_app/screen/main_screen.dart';
 import 'package:many_vendor_app/screen/search_screen.dart';
 import 'package:many_vendor_app/screen/shop_screen.dart';
 import 'package:many_vendor_app/screen/wishlist_screen.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -38,22 +38,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  PersistentTabController _controller;
-  String email;
-  String name;
-  String avatar;
-  String token;
+  PersistentTabController? controller;
+  String email="";
+  String name="";
+  String avatar="";
+  String token="";
 
   @override
   void initState() {
     statusCheck(context);
     super.initState();
-    _controller = PersistentTabController(initialIndex: 2);
+    controller = PersistentTabController(initialIndex: 2);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller!.dispose();
     super.dispose();
   }
 
@@ -61,24 +61,25 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        return showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  title: Text('هل تريد إغلاق التطبيق؟'),
-                  actions: [
-                    FlatButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                        child: Text('لا')),
-                    FlatButton(
-                        onPressed: () {
-                          exit(0);
-                        },
-                        child: Text('نعم')),
-                  ],
-                ));
-      },
+         return ;
+           // showDialog(
+           //   context: context,
+           //  builder: (context) => AlertDialog(
+           //        title: Text('هل تريد إغلاق التطبيق؟'),
+           //        actions: [
+           //          MaterialButton(
+           //              onPressed: () {
+           //                Navigator.of(context).pop(false);
+           //              },
+           //              child: Text('لا')),
+           //          MaterialButton(
+           //              onPressed: () {
+           //                exit(0);
+           //              },
+           //              child: Text('نعم')),
+           //        ],
+           //      ));
+     },
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider<ShopProductProvider>.value(
@@ -130,25 +131,28 @@ class _HomeScreenState extends State<HomeScreen> {
               fontFamily: fontFamily,
               brightness: Brightness.light,
               primaryColor: primaryColor,
-              accentColor: primaryColor1,
+              //accentColor: primaryColor1,
               primaryIconTheme: IconThemeData(
                 color: iconColor,
               ),
               indicatorColor: secondaryColor,
-              textSelectionColor: secondaryColor,
+              //textSelectionColor: secondaryColor,
               primarySwatch: Colors.purple,
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
-            home: PersistentTabView(
-              navBarHeight: 70,
-              itemCount: 5,
-              controller: _controller,
-              screens: [
-                ShopScreen(false),
-                CategoriesScreen(),
-                MainScreen(),
-                WishListScreen(),
-                SearchScreen(),
+            home:
+
+            //PersistentTabView(
+             // isVisible: true,
+              // navBarHeight: 70,
+              // itemCount: 5,
+             // controller: controller,
+             //  screens: [
+             //    ShopScreen(false),
+             //    CategoriesScreen(),
+             //    MainScreen(),
+             //    WishListScreen(),
+             //    SearchScreen(),
               ],
               items: [
                 PersistentBottomNavBarItem(
@@ -223,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               navBarStyle: NavBarStyle.style6,
             )),
-      ),
+     // ),
     );
   }
 }

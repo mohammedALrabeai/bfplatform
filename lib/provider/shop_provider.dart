@@ -10,7 +10,7 @@ import 'package:many_vendor_app/screen/server_error_screen.dart';
 class ShopProvider extends ChangeNotifier{
   bool isLoading = true;
   ShopHub _shopHub = new ShopHub();
-  List<ShopData> list = new List();
+  List<ShopData> list = [];
 
   ShopProvider(){
     _shopHub.data = list;
@@ -26,11 +26,12 @@ class ShopProvider extends ChangeNotifier{
     return _shopHub.data;
   }
 
-  Future<ShopHub> hitApi(context) async{
-    ShopHub shopHub;
+  Future<ShopHub?> hitApi(context) async{
+    ShopHub? shopHub;
     try{
-      var response = await http.get(baseUrl+'shops');
-
+      var response = await http.get(
+          Uri.parse(
+          baseUrl+'shops'));
       if(response.statusCode == 200){
         final Map parsed = jsonDecode(response.body.toString());
         shopHub = ShopHub.fromJson(parsed);

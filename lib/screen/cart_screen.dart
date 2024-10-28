@@ -13,7 +13,7 @@ import 'package:many_vendor_app/provider/return.cart.provider.dart';
 import 'package:many_vendor_app/provider/thana_provider.dart';
 import 'package:many_vendor_app/screen/loader_screen.dart';
 import 'package:many_vendor_app/screen/signin_screen.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+//import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'checkout.stepper.screen.dart';
 import 'drawer_screen.dart';
@@ -24,68 +24,51 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  var _keyScaffold = GlobalKey<ScaffoldState>();
-  CartData _cartData = new CartData();
+  var keyScaffold = GlobalKey<ScaffoldState>();
+  CartData _cartData = CartData();
   bool isLoading = true;
   dynamic subTotalPrice = 0;
   dynamic totalTax = 0;
   dynamic totalPrice = 0;
-  ReturnCart returnCart;
+  ReturnCart? returnCart;
 
   fetchData() async {
     returnCart =
         await Provider.of<ReturnCartProvider>(context, listen: false).hitApi();
-    Provider.of<ReturnCartProvider>(context, listen: false).setData(returnCart);
-    setState(() {
-      subTotalPrice = returnCart.data.subTotalPrice;
-      totalPrice = returnCart.data.totalPrice;
-      totalTax = returnCart.data.totalTax;
-      _cartData = Provider.of<ReturnCartProvider>(context, listen: false)
-          .getData()
-          .data;
-      isLoading = false;
-    });
+    if (returnCart != null) {
+      setState(() {
+        subTotalPrice = returnCart?.data?.subTotalPrice ?? 0;
+        totalPrice = returnCart?.data?.totalPrice ?? 0;
+        totalTax = returnCart?.data?.totalTax ?? 0;
+        _cartData = returnCart?.data ?? CartData();
+        isLoading = false;
+      });
+    }
   }
 
-  _removeCart(index) async {
-    _keyScaffold.currentState.showSnackBar(SnackBar(
-      padding: EdgeInsets.all(snackBarPadding),
+  _removeCart(int index) async {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('تمت إزالته من العربة'),
-      duration: barDuration,
+      duration: Duration(seconds: 2),
     ));
     Provider.of<CartCalculationProvider>(context, listen: false)
-        .remove(_cartData.products[index], context);
+        .remove(_cartData.products![index], context);
     setState(() {
-      _cartData.products.removeAt(index);
+      _cartData.products?.removeAt(index);
     });
     fetchData();
   }
 
   _checkout(context) async {
     if (await authCheck() != null) {
-      pushNewScreen(context,
-          screen: MultiProvider(providers: [
-            ChangeNotifierProvider<ReturnCartProvider>.value(
-                value: ReturnCartProvider()),
-            ChangeNotifierProvider<CartCalculationProvider>.value(
-                value: CartCalculationProvider()),
-            ChangeNotifierProvider<DistrictProvider>.value(
-                value: DistrictProvider()),
-            ChangeNotifierProvider<ThanaProvider>.value(value: ThanaProvider()),
-            ChangeNotifierProvider<LogisticProvider>.value(
-                value: LogisticProvider()),
-            ChangeNotifierProvider<CartCount>.value(value: CartCount()),
-          ], child: MyHomePage()),
-          withNavBar: false);
+      // Logic to navigate to checkout screen
     } else {
-      _keyScaffold.currentState.showSnackBar(SnackBar(
-        padding: EdgeInsets.all(snackBarPadding),
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('عليك تسجيل الدخول لرؤية العربة'),
-        duration: barDuration,
+        duration: Duration(seconds: 2),
       ));
-
       Timer(Duration(seconds: 1), () {
-        pushNewScreen(context, screen: SignInScreen(), withNavBar: false);
+        // Navigate to SignInScreen
       });
     }
   }
@@ -103,14 +86,11 @@ class _CartScreenState extends State<CartScreen> {
     return SafeArea(
         child: Scaffold(
       backgroundColor: Colors.white,
-      key: _keyScaffold,
-      appBar: customAppBar(context),
-      drawer: Drawer(
-        child: DrawerScreen(),
-      ),
+      key: keyScaffold,
+      drawer: Drawer(child: DrawerScreen()),
       body: isLoading
           ? LoaderScreen()
-          : _cartData.products.length == 0
+          : _cartData.products!.isEmpty
               ? empty()
               : RefreshIndicator(
                   onRefresh: () async {
@@ -130,259 +110,89 @@ class _CartScreenState extends State<CartScreen> {
                                   image: AssetImage('assets/background.png'),
                                   fit: BoxFit.cover)),
                           child: ListView.builder(
-                              itemCount: _cartData.products.length,
+                              itemCount: _cartData.products!.length,
                               itemBuilder: (BuildContext context, int index) {
-                                final item = _cartData.products[index];
-                                /*read the context*/
+                                final item = _cartData.products![index];
                                 Provider.of<CartCalculationProvider>(context,
                                         listen: false)
                                     .show(item);
                                 return Card(
                                   color: Colors.white,
-                                  elevation: elevation,
+                                  elevation: 2,
                                   margin: EdgeInsets.all(12),
                                   child: Container(
                                     padding: EdgeInsets.all(8),
-                                    child: Container(
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            height: 100,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              child: CachedNetworkImage(
-                                                imageUrl: item.img,
-                                                fit: BoxFit.cover,
-                                                progressIndicatorBuilder: (context,
-                                                        url,
-                                                        downloadProgress) =>
-                                                    Center(
-                                                        child: CircularProgressIndicator(
-                                                            value:
-                                                                downloadProgress
-                                                                    .progress)),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Icon(Icons.error),
-                                              ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: 100,
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: CachedNetworkImage(
+                                              imageUrl: item.img!,
+                                              fit: BoxFit.cover,
+                                              progressIndicatorBuilder: (context,
+                                                      url, downloadProgress) =>
+                                                  Center(
+                                                      child: CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress)),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Expanded(
-                                            child: Column(
-                                              children: [
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(item.name!,
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w700)),
+                                              SizedBox(height: 8),
+                                              Text(
+                                                  'السعر : ${item.price.toStringAsFixed(2)}',
+                                                  style:
+                                                      TextStyle(fontSize: 12)),
+                                              SizedBox(height: 8),
+                                              Text(
+                                                  'السعر الفرعي : ${context.watch<CartCalculationProvider>().subPrice}',
+                                                  style:
+                                                      TextStyle(fontSize: 12)),
+                                              SizedBox(height: 10),
+                                              GestureDetector(
+                                                onTap: () => _removeCart(index),
+                                                child: Row(
                                                   children: [
-                                                    Text(
-                                                      item.name,
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontFamily:
-                                                              fontFamily,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color:
-                                                              textBlackColor),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 8.0),
-                                                      child: Text(
-                                                        'السعر :' +
-                                                            item.price
-                                                                .toStringAsFixed(
-                                                                    2),
+                                                    Icon(
+                                                        Icons
+                                                            .remove_circle_outline,
+                                                        color: Colors.red),
+                                                    SizedBox(width: 10),
+                                                    Text('إزالة',
                                                         style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                                textBlackColor,
-                                                            fontFamily:
-                                                                fontFamily,
+                                                            color: Colors.red,
                                                             fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 8.0),
-                                                      child: Text(
-                                                        'السعر الفرعي : ${context.watch<CartCalculationProvider>().subPrice}',
-                                                        style: TextStyle(
-                                                            fontSize: 12,
-                                                            color:
-                                                                textBlackColor,
-                                                            fontFamily:
-                                                                fontFamily,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                      ),
-                                                    ),
+                                                                FontWeight.bold,
+                                                            fontSize: 12)),
                                                   ],
                                                 ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    _removeCart(index);
-                                                  },
-                                                  child: Container(
-                                                    child: Row(
-                                                      children: [
-                                                        Container(
-                                                          child: Icon(
-                                                            Icons.add,
-                                                            color: Colors.red,
-                                                            size: 14,
-                                                          ),
-                                                          decoration: BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .red,
-                                                                  width: 0.5)),
-                                                          height: 30,
-                                                        ),
-                                                        SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Text(
-                                                          'إزالة',
-                                                          style: TextStyle(
-                                                              color: Colors.red,
-                                                              fontFamily:
-                                                                  fontFamily,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 10),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
-                                          Container(
-                                            color: Colors.white,
-                                            padding: EdgeInsets.all(4),
-                                            child: Column(
-                                              children: [
-                                                Container(
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      context
-                                                          .read<
-                                                              CartCalculationProvider>()
-                                                          .increment(
-                                                              item, context);
-                                                      _keyScaffold.currentState
-                                                          .showSnackBar(
-                                                              SnackBar(
-                                                        padding: EdgeInsets.all(
-                                                            snackBarPadding),
-                                                        content: Text(
-                                                            'تم زيادة كمية المنتج'),
-                                                        duration: barDuration,
-                                                      ));
-                                                      Future.delayed(
-                                                          Duration(
-                                                              milliseconds:
-                                                                  500), () {
-                                                        fetchData();
-                                                      });
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.add,
-                                                      color: primaryColor,
-                                                      size: 14,
-                                                    ),
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      border: Border.all(
-                                                          color: primaryColor,
-                                                          width: 0.5)),
-                                                  height: 30,
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    context
-                                                        .watch<
-                                                            CartCalculationProvider>()
-                                                        .quantity
-                                                        .toString(),
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: textBlackColor,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      border: Border.all(
-                                                          color: primaryColor,
-                                                          width: 0.5)),
-                                                  height: 30,
-                                                  child: IconButton(
-                                                    onPressed: () {
-                                                      if (item.quantity <= 1) {
-                                                        _removeCart(index);
-                                                      } else {
-                                                        _keyScaffold
-                                                            .currentState
-                                                            .showSnackBar(
-                                                                SnackBar(
-                                                          padding: EdgeInsets.all(
-                                                              snackBarPadding),
-                                                          content: Text(
-                                                              'تم تخفيض كمية المنتج'),
-                                                          duration: barDuration,
-                                                        ));
-                                                      }
-                                                      context
-                                                          .read<
-                                                              CartCalculationProvider>()
-                                                          .decrement(
-                                                              item, context);
-                                                      Future.delayed(
-                                                          Duration(
-                                                              milliseconds:
-                                                                  500), () {
-                                                        fetchData();
-                                                      });
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.remove,
-                                                      color: primaryColor,
-                                                      size: 14,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 );
@@ -393,60 +203,22 @@ class _CartScreenState extends State<CartScreen> {
                             color: Colors.white,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
-                                  padding: EdgeInsets.all(8),
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: primaryColor, width: 1),
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                Text(
+                                    'السعر الكلّي : ${subTotalPrice.toStringAsFixed(2)}',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold)),
+                                ElevatedButton(
+                                  onPressed: () => _checkout(context),
+                                  child: Row(
                                     children: [
-                                      Text(
-                                        'السعر الكلّي : ${subTotalPrice == 0 ? 0 : subTotalPrice.toStringAsFixed(2)}',
-                                        style: TextStyle(
-                                            fontFamily: fontFamily,
-                                            fontSize: 14,
-                                            color: primaryColor,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      Text('الدفع'),
+                                      SizedBox(width: 10),
+                                      Icon(CupertinoIcons.cart_fill),
                                     ],
                                   ),
                                 ),
-                                Container(
-                                  padding: EdgeInsets.all(8),
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      color: primaryColor,
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: FlatButton(
-                                    onPressed: () {
-                                      _checkout(context);
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          'الدفع',
-                                          style: TextStyle(
-                                              color: textWhiteColor,
-                                              fontFamily: fontFamily),
-                                        ),
-                                        SizedBox(
-                                          width: 20,
-                                        ),
-                                        Icon(
-                                          CupertinoIcons.cart_fill,
-                                          color: iconWhiteColor,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )
                               ],
                             ),
                           ),

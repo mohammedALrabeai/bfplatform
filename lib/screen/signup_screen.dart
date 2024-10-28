@@ -9,7 +9,6 @@ import 'package:many_vendor_app/provider/cart_count_provider.dart';
 import 'package:many_vendor_app/screen/drawer_screen.dart';
 import 'package:many_vendor_app/screen/signin_screen.dart';
 import 'package:http/http.dart' as http;
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -28,10 +27,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isLoading = false;
 
   void showInSnackBar(String value) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-        padding: EdgeInsets.all(snackBarPadding),
-        content: Text(value),
-        duration: barDuration));
+    // _scaffoldKey.currentState!.showSnackBar(SnackBar(
+    //     padding: EdgeInsets.all(snackBarPadding),
+    //     content: Text(value),
+    //     duration: barDuration));
   }
 
   _createAccount(
@@ -42,7 +41,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (password == newpassword) {
       try {
         String url = baseUrl + 'register';
-        final _result = await http.post(url,
+        final _result = await http.post(
+            Uri.parse(
+            url),
             body: {'name': name, 'email': email, 'password': password});
         if (_result.statusCode == 200 && _result.body != null) {
           final data = json.decode(_result.body);
@@ -59,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             _showSuccessMessage(context, data['errorMessage']);
             Timer(Duration(seconds: 1), () {
               Navigator.pop(context);
-              pushNewScreen(context, screen: SignInScreen(), withNavBar: true);
+           //   pushNewScreen(context, screen: SignInScreen(), withNavBar: true);
             });
           }
         } else {
@@ -170,7 +171,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     try {
       Pattern pattern =
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-      RegExp regex = new RegExp(pattern);
+      // RegExp regex = new RegExp(pattern);
+      RegExp regex = new RegExp( r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
       if (!regex.hasMatch(value))
         return false;
       else
@@ -193,7 +195,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         key: _scaffoldKey,
-        appBar: customAppBar(context),
+        //appBar: customAppBar(context),
         drawer: Drawer(
           child: DrawerScreen(),
         ),

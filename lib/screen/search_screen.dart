@@ -16,18 +16,18 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  List<ShopProductData> shopProductData;
+  List<ShopProductData> shopProductData=[];
   bool isLoading = true;
   String search = "";
 
   fetchData(value) async {
-    ShopProductHub shopProductHub =
+    ShopProductHub? shopProductHub =
         await Provider.of<ShopProductProvider>(context, listen: false)
             .allProduct(value);
 
     /*set data*/
     Provider.of<ShopProductProvider>(context, listen: false)
-        .setData(shopProductHub);
+        .setData(shopProductHub!);
     setState(() {
       shopProductData =
           Provider.of<ShopProductProvider>(context, listen: false).getData();
@@ -47,7 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: customAppBar(context),
+       // appBar: customAppBar(context),
         drawer: Drawer(
           child: DrawerScreen(),
         ),

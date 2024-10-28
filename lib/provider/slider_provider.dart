@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 class SliderProvider extends ChangeNotifier {
   bool isLoading = true;
   SliderClass _slider = new SliderClass();
-  List<SliderData> list = new List();
+  List<SliderData> list =[];
 
   SliderProvider()  {
     _slider.data = list;
@@ -17,8 +17,8 @@ class SliderProvider extends ChangeNotifier {
   }
 
 
-  setData(SliderClass slider) {
-    _slider = slider;
+  setData(SliderClass? slider) {
+    _slider = slider!;
     isLoading = false;
     notifyListeners();
   }
@@ -27,10 +27,13 @@ class SliderProvider extends ChangeNotifier {
     return _slider.data;
   }
 
-  Future<SliderClass> hitApi() async {
+  Future<SliderClass?> hitApi() async {
     try {
-      var response = await http.get(baseUrl + 'sliders');
-      SliderClass slider;
+      var response = await http.get(
+
+          Uri.parse(
+          baseUrl + 'sliders'));
+      SliderClass? slider;
       if (response.statusCode == 200) {
         final Map parsed = jsonDecode(response.body.toString());
 

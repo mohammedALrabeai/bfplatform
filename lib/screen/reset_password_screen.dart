@@ -8,7 +8,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:many_vendor_app/helper/appbar.dart';
 import 'package:many_vendor_app/helper/helper.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_screen.dart';
@@ -25,13 +24,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   bool _passwordVisible = false;
   bool _isLoadingModal = false;
 
-  String email = '';
-  String code = '';
+  String? email = '';
+  String? code = '';
 
   _changePassword(String newPassword, String cpassword) async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
-    email = _prefs.getString('femail');
-    code = _prefs.getString('code');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    email = prefs.getString('female');
+    code = prefs.getString('code');
     setState(() {
       _isLoadingModal = true;
     });
@@ -39,7 +38,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     if (newPassword == cpassword) {
       try {
         String url = baseUrl + '3/forget/password';
-        final _result = await http.post(url,
+        final _result = await http.post(
+            Uri.parse(url),
             body: jsonEncode({
               'password': newPassword,
               'email': email,
@@ -65,7 +65,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             _showSuccessMessage(context, data['message']);
             Timer(Duration(seconds: 2), () {
               Navigator.pop(context);
-              pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
+             // pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
             });
           }
         }
@@ -78,11 +78,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   void showInSnackBar(String value) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-      padding: EdgeInsets.all(snackBarPadding),
-      content: Text(value),
-      duration: barDuration,
-    ));
+    // _scaffoldKey.currentState.showSnackBar(SnackBar(
+    //   padding: EdgeInsets.all(snackBarPadding),
+    //   content: Text(value),
+    //   duration: barDuration,
+    // ));
   }
 
   _showFailedMessage(BuildContext context, title) {
@@ -178,8 +178,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       child: Scaffold(
           backgroundColor: Colors.white,
           key: _scaffoldKey,
-          appBar: customSingleAppBar(
-              context, 'إستعادة كلمة المرور', textWhiteColor),
+          // appBar:
+          // customSingleAppBar(
+          //     context, 'إستعادة كلمة المرور', textWhiteColor),
           body: SingleChildScrollView(
             child: Container(
               decoration: BoxDecoration(
@@ -295,7 +296,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     height: 20,
                     color: screenWhiteBackground,
                   ),
-                  FlatButton(
+                  MaterialButton(
                     color: primaryColor,
                     child: Container(
                         height: 40,

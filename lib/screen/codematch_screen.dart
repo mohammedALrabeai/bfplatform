@@ -8,7 +8,6 @@ import 'package:many_vendor_app/helper/appbar.dart';
 import 'package:many_vendor_app/helper/helper.dart';
 import 'package:http/http.dart' as http;
 import 'package:many_vendor_app/screen/reset_password_screen.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CodeMatchScreen extends StatefulWidget {
@@ -25,23 +24,24 @@ class _CodeMatchScreenState extends State<CodeMatchScreen> {
   String email = '';
 
   void showInSnackBar(String value) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
-      padding: EdgeInsets.all(snackBarPadding),
-      content: Text(value),
-      duration: barDuration,
-    ));
+    // _scaffoldKey.currentState.showSnackBar(SnackBar(
+    //   padding: EdgeInsets.all(snackBarPadding),
+    //   content: Text(value),
+    //   duration: barDuration,
+    // ));
   }
 
   _sendToken(String code) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    email = _prefs.getString('femail');
+    email = _prefs.getString('femail').toString();
 
     setState(() {
       _isLoading = true;
     });
     try {
       String url = baseUrl + '2/forget/password/' + email + '/' + code;
-      final _result = await http.get(url);
+      final _result = await http.get(
+          Uri.parse(url));
       print('lf code natok ${_result.body.toString()}');
       if (_result.statusCode == 200 && _result.body != null) {
         final data = json.decode(_result.body);
@@ -58,8 +58,8 @@ class _CodeMatchScreenState extends State<CodeMatchScreen> {
           _showSuccessMessage(context, data['message']);
           Timer(Duration(seconds: 2), () {
             Navigator.pop(context);
-            pushNewScreen(context,
-                screen: ResetPasswordScreen(), withNavBar: false);
+            // pushNewScreen(context,
+            //     screen: ResetPasswordScreen(), withNavBar: false);
           });
         }
       }
@@ -170,7 +170,7 @@ class _CodeMatchScreenState extends State<CodeMatchScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         key: _scaffoldKey,
-        appBar: customSingleAppBar(context, 'قم بتفعيل الكود', Colors.white),
+        //appBar: customSingleAppBar(context, 'قم بتفعيل الكود', Colors.white),
         body: SingleChildScrollView(
           child: Container(
             decoration: BoxDecoration(

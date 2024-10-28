@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 class SingleBrandProductScreen extends StatefulWidget {
   BrandData brandData;
   int id;
-  SingleBrandProductScreen({this.brandData,this.id});
+  SingleBrandProductScreen({required this.brandData,required this.id});
 
   @override
   _SingleBrandProductScreenState createState() =>
@@ -20,11 +20,11 @@ class SingleBrandProductScreen extends StatefulWidget {
 }
 
 class _SingleBrandProductScreenState extends State<SingleBrandProductScreen> {
-  List<ShopProductData> shopProductData = List();
+  List<ShopProductData> shopProductData = [];
   bool isLoading = true;
 
   getBrandProduct() async {
-    ShopProductHub shopProductHub;
+    ShopProductHub? shopProductHub;
     if(widget.id == 0){
       shopProductHub =
       await Provider.of<BrandProductProvider>(context, listen: false)
@@ -37,7 +37,7 @@ class _SingleBrandProductScreenState extends State<SingleBrandProductScreen> {
 
     /*set data*/
     Provider.of<BrandProductProvider>(context, listen: false)
-        .setData(shopProductHub);
+        .setData(shopProductHub!);
     setState(() {
       shopProductData =
           Provider.of<BrandProductProvider>(context, listen: false).getData();
@@ -60,7 +60,7 @@ class _SingleBrandProductScreenState extends State<SingleBrandProductScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: customAppBar(context),
+       // appBar: customAppBar(context),
         body: isLoading
             ? LoaderScreen()
             : Container(

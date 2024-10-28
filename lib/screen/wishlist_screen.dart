@@ -10,8 +10,17 @@ import 'package:many_vendor_app/repository/db_connection.dart';
 import 'package:many_vendor_app/screen/drawer_screen.dart';
 import 'package:many_vendor_app/screen/loader_screen.dart';
 import 'package:many_vendor_app/screen/single_product_screen.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+//import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:many_vendor_app/provider/cart.calculate.provider.dart';
+import 'package:many_vendor_app/provider/cart_count_provider.dart';
+import 'package:many_vendor_app/provider/return.cart.provider.dart';
+import 'package:many_vendor_app/screen/cart_screen.dart';
 import 'package:provider/provider.dart';
+// import 'helper.dart';
+// import 'package:provider/provider.dart';
 
 class WishListScreen extends StatefulWidget {
   @override
@@ -19,16 +28,16 @@ class WishListScreen extends StatefulWidget {
 }
 
 class _WishListScreenState extends State<WishListScreen> {
-  List<ShopProductData> list = List();
+  List<ShopProductData> list = [];
   bool isLoading = true;
 
   fetchData() async {
     /*get data form database*/
-    ShopProductHub wishlistProductHub;
+    ShopProductHub? wishlistProductHub;
     wishlistProductHub =
         await Provider.of<WishlistProvider>(context, listen: false).hitApi();
     Provider.of<WishlistProvider>(context, listen: false)
-        .setData(wishlistProductHub);
+        .setData(wishlistProductHub!);
     setState(() {
       list = Provider.of<WishlistProvider>(context, listen: false).getData();
       isLoading = false;
@@ -49,12 +58,97 @@ class _WishListScreenState extends State<WishListScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return isLoading
         ? LoaderScreen()
         : SafeArea(
             child: Scaffold(
             backgroundColor: Colors.white,
-            appBar: customAppBar(context),
+            appBar:AppBar(
+              toolbarHeight: 100,
+              elevation: 0,
+              iconTheme: IconThemeData(
+                color: iconColor,
+              ),
+              actionsIconTheme: IconThemeData(
+                color: iconColor,
+              ),
+              backgroundColor: colorConvert('#93283a'),
+              title: Center(
+                  child: Container(
+                      padding: EdgeInsets.all(14),
+                      height: 100,
+                      width: 100,
+                      child: Image.asset(
+                        'assets/2.png',
+                        fit: BoxFit.contain,
+                      ))),
+              actions: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: primaryColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          // Navigator.push(
+                          //    this.context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => MultiProvider(providers: [
+                          //               ChangeNotifierProvider<CartCount>.value(
+                          //                   value: CartCount()),
+                          //               ChangeNotifierProvider<ReturnCartProvider>.value(
+                          //                   value: ReturnCartProvider()),
+                          //               ChangeNotifierProvider<
+                          //                       CartCalculationProvider>.value(
+                          //                   value: CartCalculationProvider()),
+                          //             ], child: CartScreen())));
+                        },
+                        child: Stack(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 18.0),
+                              child: IconButton(
+                                icon: Icon(
+                                  CupertinoIcons.cart_fill,
+                                  size: 28,
+                                  color: iconWhiteColor,
+                                ),
+                                onPressed: null,
+                              ),
+                            ),
+                            Positioned(
+                                left: 21.5,
+                                child: Stack(
+                                  children: <Widget>[
+                                    Icon(Icons.brightness_1_sharp,
+                                        size: 16, color: Colors.white),
+                                    Positioned(
+                                        top: 4.5,
+                                        right: 1,
+                                        child: Center(
+                                          child: Text(
+                                            "context.watch<CartCount>().count.toString(),",
+                                            //context.watch<CartCount>().count.toString(),
+                                            style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 11.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        )),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      )),
+                )
+              ],
+            ),
+            // customAppBar(
+            //     //context
+            // ),
             drawer: Drawer(child: DrawerScreen()),
             body: list.length == 0
                 ? empty()
@@ -106,22 +200,23 @@ class _WishListScreenState extends State<WishListScreen> {
                                 SizedBox(width: 10),
                                 GestureDetector(
                                   onTap: () {
-                                    pushNewScreen(
-                                      context,
-                                      screen: MultiProvider(
-                                        providers: [
-                                          ChangeNotifierProvider<
-                                                  ProductDetailsProvider>.value(
-                                              value: ProductDetailsProvider()),
-                                          ChangeNotifierProvider<
-                                                  VariantStatus>.value(
-                                              value: VariantStatus()),
-                                        ],
-                                        child: SingleProductScreen(
-                                          shopProductData: item,
-                                        ),
-                                      ),
-                                    );
+                                    // pushNewScreen(
+                                    //   context,
+                                    //   screen: MultiProvider(
+                                    //     providers: [
+                                    //       ChangeNotifierProvider<
+                                    //               ProductDetailsProvider>.value(
+                                    //           value: ProductDetailsProvider()),
+                                    //       ChangeNotifierProvider<
+                                    //               VariantStatus>.value(
+                                    //           value: VariantStatus()),
+                                    // ],
+
+                                  // }.    child: SingleProductScreen(
+                                  //         shopProductData: item,
+                                  //       ),
+                                  //     ),
+                                  //   );
                                   },
                                   child: Column(
                                     crossAxisAlignment:
@@ -156,14 +251,14 @@ class _WishListScreenState extends State<WishListScreen> {
                                             list.removeAt(index);
                                           });
                                           _removeFormDb(item.productId);
-                                          Scaffold.of(context).showSnackBar(
-                                            SnackBar(
-                                              padding: EdgeInsets.all(
-                                                  snackBarPadding),
-                                              content: Text('تمت إزالته'),
-                                              duration: barDuration,
-                                            ),
-                                          );
+                                          // Scaffold.of(context).showSnackBar(
+                                          //   SnackBar(
+                                          //     padding: EdgeInsets.all(
+                                          //         snackBarPadding),
+                                          //     content: Text('تمت إزالته'),
+                                          //     duration: barDuration,
+                                          //   ),
+                                        //  );
                                         },
                                         child: Container(
                                           child: Row(

@@ -10,7 +10,6 @@ import 'package:many_vendor_app/screen/shop_screen.dart';
 import 'package:many_vendor_app/screen/signin_screen.dart';
 import 'package:many_vendor_app/screen/signup_screen.dart';
 import 'package:many_vendor_app/screen/wishlist_screen.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'home_screen.dart';
 
@@ -21,10 +20,10 @@ class DrawerScreen extends StatefulWidget {
 
 class _DrawerScreenState extends State<DrawerScreen> {
   bool auth = false;
-  String email;
-  String name;
-  String avatar;
-  String token;
+  String email="";
+  String name="";
+  String avatar="";
+  String token="";
 
   checkAuth() async {
     if (await authCheck() != null) {
@@ -43,17 +42,19 @@ class _DrawerScreenState extends State<DrawerScreen> {
   _logout() async {
     try {
       final url = baseUrl + 'logout';
-      await http.post(url, headers: {
+      await http.post(
+          Uri.parse(
+          url), headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
       });
 
       removeSharedPreferences();
-      pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
+     // pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
     } catch (e) {
       removeSharedPreferences();
-      pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
+     // pushNewScreen(context, screen: HomeScreen(), withNavBar: false);
     }
   }
 
@@ -117,11 +118,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
                       style: drawerTextStyle,
                     ),
                     onTap: () {
-                      pushNewScreen(context,
-                          screen: HomeScreen(),
-                          withNavBar: false,
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.cupertino);
+                      // pushNewScreen(context,
+                      //     screen: HomeScreen(),
+                      //     withNavBar: false,
+                      //     pageTransitionAnimation:
+                      //         PageTransitionAnimation.cupertino);
                     },
                     trailing: Icon(
                       Icons.arrow_forward,
@@ -233,9 +234,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
                                   style: drawerTextStyle,
                                 ),
                                 onTap: () {
-                                  pushNewScreen(context,
-                                      screen: DashboardScreen(),
-                                      withNavBar: false);
+                                  // pushNewScreen(context,
+                                  //     screen: DashboardScreen(),
+                                  //     withNavBar: false);
                                 },
                               ),
                               ListTile(

@@ -19,10 +19,12 @@ class CampaignItemProvider extends ChangeNotifier{
     return _campaignItem.data;
   }
 
-  Future<CampaignItem> hitApi(id,context) async{
-    CampaignItem campaignItem;
+  Future<CampaignItem?> hitApi(id,context) async{
+    CampaignItem? campaignItem;
     try{
-      var response = await http.get(baseUrl+'campaign/'+id.toString());
+      var response = await http.get(
+          Uri.parse(
+          baseUrl+'campaign/'+id.toString()));
 
       if(response.statusCode == 200){
         final Map parsed = jsonDecode(response.body.toString());
